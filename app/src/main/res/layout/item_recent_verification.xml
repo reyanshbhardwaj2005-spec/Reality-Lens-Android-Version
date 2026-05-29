@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:strokeColor="?attr/cardStrokeColor"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:background="@drawable/secondary_btn_bg">
+
+        <!-- Left: Image Thumbnail Container -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_thumbnail"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="?attr/cardStrokeColor"
+            app:strokeWidth="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_gallery" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Verdict Badge (verdict) -->
+        <TextView
+            android:id="@+id/tv_verdict_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/card_thumbnail"
+            app:layout_constraintTop_toTopOf="@id/card_thumbnail"
+            tools:text="VERDICT" />
+
+        <!-- Stats (confidence and reality_score) -->
+        <TextView
+            android:id="@+id/tv_stats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="?attr/textSecondary"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_verdict_badge"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_verdict_badge"
+            app:layout_constraintTop_toTopOf="@id/tv_verdict_badge"
+            tools:text="Score: 0.9 | Conf: 95%" />
+
+        <!-- Reality Score Progress Bar -->
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pb_item_reality_score"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            app:trackThickness="4dp"
+            app:trackCornerRadius="2dp"
+            app:trackColor="?attr/cardStrokeColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_verdict_badge"
+            app:layout_constraintTop_toBottomOf="@id/tv_verdict_badge" />
+
+        <!-- Content Preview (claim) -->
+        <TextView
+            android:id="@+id/tv_content_preview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="?attr/textPrimary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_verdict_badge"
+            app:layout_constraintTop_toBottomOf="@id/pb_item_reality_score"
+            tools:text="The claim text captured from the screen goes here..." />
+
+        <!-- Timestamp (created_at) -->
+        <TextView
+            android:id="@+id/tv_timestamp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="?attr/textSecondary"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_verdict_badge"
+            app:layout_constraintTop_toBottomOf="@id/tv_content_preview"
+            tools:text="5/28/2026, 12:11:57 PM" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

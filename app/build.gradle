@@ -1,0 +1,65 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'com.example.realiylens'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.example.realiylens"
+        minSdk 24
+        targetSdk 35
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+
+        // Load properties from .env file
+        def envFile = rootProject.file(".env")
+        if (envFile.exists()) {
+            envFile.eachLine { line ->
+                def (key, value) = line.tokenize('=')
+                buildConfigField "String", key, "\"${value}\""
+            }
+        } else {
+            // Fallback if .env doesn't exist (e.g. CI)
+            buildConfigField "String", "BASE_URL", "\"https://realitylens-9qu1.onrender.com/\""
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    buildFeatures {
+        buildConfig true
+    }
+}
+
+dependencies {
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+    
+    // Networking
+    implementation libs.retrofit
+    implementation libs.converter.gson
+    implementation libs.gson
+    implementation libs.okhttp.logging
+    
+    // Image Loading
+    implementation libs.glide
+
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+}

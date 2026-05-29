@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeColor="?attr/cardStrokeColor"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:background="@drawable/secondary_btn_bg">
+
+        <!-- Left: Image Thumbnail Placeholder -->
+        <View
+            android:id="@+id/view_thumbnail_placeholder"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:background="@drawable/skeleton_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Verdict Badge Placeholder -->
+        <View
+            android:id="@+id/view_verdict_placeholder"
+            android:layout_width="60dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/skeleton_bg"
+            app:layout_constraintStart_toEndOf="@id/view_thumbnail_placeholder"
+            app:layout_constraintTop_toTopOf="@id/view_thumbnail_placeholder" />
+
+        <!-- Progress Bar Placeholder -->
+        <View
+            android:id="@+id/view_progress_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/skeleton_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/view_verdict_placeholder"
+            app:layout_constraintTop_toBottomOf="@id/view_verdict_placeholder" />
+
+        <!-- Content Preview Placeholder -->
+        <View
+            android:id="@+id/view_content_placeholder_1"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/skeleton_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/view_verdict_placeholder"
+            app:layout_constraintTop_toBottomOf="@id/view_progress_placeholder" />
+
+        <View
+            android:id="@+id/view_content_placeholder_2"
+            android:layout_width="120dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/skeleton_bg"
+            app:layout_constraintStart_toStartOf="@id/view_verdict_placeholder"
+            app:layout_constraintTop_toBottomOf="@id/view_content_placeholder_1" />
+
+        <!-- Timestamp Placeholder -->
+        <View
+            android:id="@+id/view_timestamp_placeholder"
+            android:layout_width="80dp"
+            android:layout_height="12dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/skeleton_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/view_verdict_placeholder"
+            app:layout_constraintTop_toBottomOf="@id/view_content_placeholder_2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

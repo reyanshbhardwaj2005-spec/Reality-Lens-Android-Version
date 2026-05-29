@@ -1,0 +1,51 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.RealiyLens" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">#00D2FF</item>
+
+        <!-- Neutralize M3 Surface Tints -->
+        <item name="surfaceTint">@android:color/transparent</item>
+        <item name="colorSurface">#F8FAFC</item>
+        <item name="colorSurfaceVariant">#F1F5F9</item>
+        <item name="colorOnSurface">#1A1A1A</item>
+        <item name="colorOnSurfaceVariant">#666666</item>
+
+        <!-- Fix yellow autofill highlight -->
+        <item name="android:autofilledHighlight" tools:targetApi="26">@android:color/transparent</item>
+
+        <!-- Custom Attributes for Light Mode -->
+        <item name="mainBackground">#F8F9FA</item>
+        <item name="secondaryBackground">#FFFFFF</item>
+        <item name="textPrimary">#1A1A1A</item>
+        <item name="textSecondary">#666666</item>
+        <item name="cardStrokeColor">#D1D5DB</item>
+        <item name="rippleColor">#1A000000</item>
+
+        <item name="gradientStart">#F8FAFC</item>
+        <item name="gradientCenter">#F1F5F9</item>
+        <item name="gradientEnd">#E2E8F0</item>
+
+        <!-- Glass Effect: Transparent Neutrals -->
+        <item name="buttonGradientStart">#CC00D2FF</item>
+        <item name="buttonGradientCenter">#CC4FC3F7</item>
+        <item name="buttonGradientEnd">#CC0097A7</item>
+        <item name="buttonStroke">#CC00D2FF</item>
+
+        <!-- 5% black for background, 15% black for stroke -->
+        <item name="inputBgColor">#0D000000</item>
+        <item name="inputStrokeColor">#26000000</item>
+    </style>
+
+    <style name="Theme.RealiyLens" parent="Base.Theme.RealiyLens" />
+
+    <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+</resources>

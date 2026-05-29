@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Mode Overrides for Semantic Colors -->
+    <color name="login_background">#0B0B0E</color>
+    <color name="input_background">#1C1C1E</color>
+    <color name="input_stroke">#33FFFFFF</color>
+    <color name="text_secondary">#99FFFFFF</color>
+    <color name="google_btn_background">#1C1C1E</color>
+
+    <!-- Verdict Colors for Dark Mode -->
+    <color name="verdict_real">#4CAF50</color>
+    <color name="verdict_fake">#F44336</color>
+    <color name="verdict_suspicious">#FFC107</color>
+    <color name="verdict_unverified">#00BCD4</color>
+    <color name="verdict_unreadable">#9E9E9E</color>
+    <color name="verdict_satire">#E91E63</color>
+</resources>

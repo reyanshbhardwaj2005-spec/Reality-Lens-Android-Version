@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Pressed State -->
+    <item android:state_pressed="true">
+
+        <layer-list>
+
+            <!-- Shadow -->
+            <item
+                android:left="6dp"
+                android:top="8dp">
+
+                <shape android:shape="rectangle">
+
+                    <corners android:radius="28dp"/>
+
+                    <gradient
+                        android:angle="90"
+                        android:startColor="#88000000"
+                        android:endColor="#22000000"/>
+
+                </shape>
+            </item>
+
+            <!-- Main Button -->
+            <item>
+
+                <shape android:shape="rectangle">
+
+                    <corners android:radius="28dp"/>
+
+                    <gradient
+                        android:angle="270"
+                        android:startColor="#2563EB"
+                        android:centerColor="#1E1B4B"
+                        android:endColor="#050505"/>
+
+                    <stroke
+                        android:width="2dp"
+                        android:color="#60A5FA"/>
+
+                    <padding
+                        android:left="20dp"
+                        android:top="16dp"
+                        android:right="20dp"
+                        android:bottom="16dp"/>
+
+                </shape>
+            </item>
+
+            <!-- Top Shine -->
+            <item
+                android:left="12dp"
+                android:top="5dp"
+                android:right="12dp"
+                android:bottom="48dp">
+
+                <shape android:shape="rectangle">
+
+                    <corners android:radius="22dp"/>
+
+                    <gradient
+                        android:angle="270"
+                        android:startColor="#55FFFFFF"
+                        android:endColor="#00FFFFFF"/>
+
+                </shape>
+            </item>
+
+        </layer-list>
+
+    </item>
+
+    <!-- Default State -->
+    <item>
+
+        <layer-list>
+
+            <!-- Outer Glow Shadow -->
+            <item
+                android:left="4dp"
+                android:top="10dp"
+                android:right="4dp">
+
+                <shape android:shape="rectangle">
+
+                    <corners android:radius="30dp"/>
+
+                    <gradient
+                        android:angle="90"
+                        android:startColor="#AA000000"
+                        android:centerColor="#44000000"
+                        android:endColor="#00000000"/>
+
+                </shape>
+            </item>
+
+            <!-- Blue Glow -->
+            <item
+                android:left="-2dp"
+                android:top="-2dp"
+                android:right="-2dp"
+                android:bottom="-2dp">
+
+                <shape android:shape="rectangle">
+
+                    <corners android:radius="30dp"/>
+
+                    <solid android:color="#1500BFFF"/>
+
+                    <stroke
+                        android:width="1dp"
+                        android:color="#3300D9FF"/>
+
+                </shape>
+            </item>
+
+            <!-- Main Button -->
+            <item>
+
+                <shape android:shape="rectangle">
+
+                    <corners android:radius="28dp"/>
+
+                    <gradient
+                        android:angle="315"
+                        android:startColor="#4F46E5"
+                        android:centerColor="#1A1B3A"
+                        android:endColor="#050505"/>
+
+                    <stroke
+                        android:width="1.8dp"
+                        android:color="#60A5FA"/>
+
+                    <padding
+                        android:left="22dp"
+                        android:top="16dp"
+                        android:right="22dp"
+                        android:bottom="16dp"/>
+
+                </shape>
+            </item>
+
+            <!-- Gloss Effect -->
+            <item
+                android:left="14dp"
+                android:top="6dp"
+                android:right="14dp"
+                android:bottom="52dp">
+
+                <shape android:shape="rectangle">
+
+                    <corners android:radius="24dp"/>
+
+                    <gradient
+                        android:angle="270"
+                        android:startColor="#66FFFFFF"
+                        android:endColor="#00FFFFFF"/>
+
+                </shape>
+            </item>
+
+        </layer-list>
+
+    </item>
+
+</selector>

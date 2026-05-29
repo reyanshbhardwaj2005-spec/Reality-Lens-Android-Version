@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="mainBackground" format="reference|color" />
+    <attr name="secondaryBackground" format="reference|color" />
+    <attr name="textPrimary" format="reference|color" />
+    <attr name="textSecondary" format="reference|color" />
+    <attr name="cardStrokeColor" format="reference|color" />
+    <attr name="rippleColor" format="reference|color" />
+
+    <!-- Material 3 Surface Attributes -->
+    <attr name="surfaceTint" format="color|reference" />
+    <attr name="colorSurface" format="color|reference" />
+    <attr name="colorSurfaceVariant" format="color|reference" />
+    <attr name="colorOnSurface" format="color|reference" />
+    <attr name="colorOnSurfaceVariant" format="color|reference" />
+
+    <!-- Gradient Background Colors -->
+    <attr name="gradientStart" format="color" />
+    <attr name="gradientCenter" format="color" />
+    <attr name="gradientEnd" format="color" />
+
+    <!-- Component Specific Attributes to maintain "Style" -->
+    <attr name="buttonGradientStart" format="color" />
+    <attr name="buttonGradientCenter" format="color" />
+    <attr name="buttonGradientEnd" format="color" />
+    <attr name="buttonStroke" format="color" />
+
+    <attr name="inputBgColor" format="color" />
+    <attr name="inputStrokeColor" format="color" />
+</resources>

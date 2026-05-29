@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/drawr"
+    android:fitsSystemWindows="true"
+    tools:context=".DashboardActivity">
+
+    <!-- Main Content -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Top Loading Bar -->
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pb_dashboard_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:layout_marginTop="32dp"
+            app:indicatorColor="@color/link_color"
+            app:layout_constraintTop_toTopOf="parent"
+            app:trackColor="?attr/cardStrokeColor"
+            app:trackThickness="10dp"
+            android:elevation="50dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_header"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:paddingHorizontal="20dp"
+            app:layout_constraintTop_toBottomOf="@id/pb_dashboard_loading">
+
+            <EditText
+                android:id="@+id/et_dashboard_search"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/secondary_btn_bg"
+                android:drawableStart="@android:drawable/ic_menu_search"
+                android:drawablePadding="12dp"
+                android:hint="Search verifications..."
+                android:paddingHorizontal="16dp"
+                android:textColor="?attr/textPrimary"
+                android:textColorHint="?attr/textSecondary"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_hamburger_menu"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/btn_hamburger_menu"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/hamburger_menu"
+                android:src="@drawable/hamburger_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?attr/textPrimary" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_recent_verifications_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:text="Recent Verifications"
+            android:textColor="?attr/textPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_header" />
+
+        <!-- Optimized List with RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_verifications"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:clipToPadding="false"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="24dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_recent_verifications_label"
+            tools:listitem="@layout/item_recent_verification" />
+
+        <!-- Skeleton Loading Container -->
+        <LinearLayout
+            android:id="@+id/ll_skeleton_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_recent_verifications_label">
+            <include layout="@layout/layout_skeleton_item" />
+            <include layout="@layout/layout_skeleton_item" />
+            <include layout="@layout/layout_skeleton_item" />
+            <include layout="@layout/layout_skeleton_item" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Sidebar Menu -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view_sidebar"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@drawable/drawr"
+        app:headerLayout="@layout/nav_header"
+        app:itemIconTint="?attr/textPrimary"
+        app:itemTextColor="?attr/textPrimary"
+        app:itemBackground="@android:color/transparent"
+        app:itemRippleColor="@android:color/transparent"
+        app:menu="@menu/drawer_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

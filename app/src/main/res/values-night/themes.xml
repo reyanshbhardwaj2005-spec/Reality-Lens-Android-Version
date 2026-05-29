@@ -1,0 +1,31 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.RealiyLens" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <item name="colorPrimary">#00D2FF</item>
+
+        <!-- Fix yellow autofill highlight -->
+        <item name="android:autofilledHighlight" tools:targetApi="26">@android:color/transparent</item>
+
+        <!-- Custom Attributes for Dark Mode -->
+        <item name="mainBackground">#0B0B0E</item>
+        <item name="secondaryBackground">#1C1C1E</item>
+        <item name="textPrimary">#FFFFFF</item>
+        <item name="textSecondary">#BDBDBD</item>
+        <item name="cardStrokeColor">#1F1F1F</item>
+        <item name="rippleColor">#40FFFFFF</item>
+
+        <!-- Component Specific for Dark Mode (Original Glass Style) -->
+        <item name="buttonGradientStart">#1E293B</item>
+        <item name="buttonGradientCenter">#111827</item>
+        <item name="buttonGradientEnd">#050505</item>
+        <item name="buttonStroke">#4FC3F7</item>
+
+        <item name="inputBgColor">#0DFFFFFF</item>
+        <item name="inputStrokeColor">#33FFFFFF</item>
+
+        <item name="gradientStart">#020617</item>
+        <item name="gradientCenter">#0F172A</item>
+        <item name="gradientEnd">#000000</item>
+    </style>
+</resources>

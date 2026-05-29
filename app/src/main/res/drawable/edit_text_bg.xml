@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Main AMOLED Background -->
+    <item>
+        <shape android:shape="rectangle">
+
+            <gradient
+                android:angle="315"
+                android:startColor="#02030A"
+                android:centerColor="#090D1A"
+                android:endColor="#000000"/>
+
+        </shape>
+    </item>
+
+    <!-- Blue Glow (Far Upper Left) -->
+    <item
+        android:left="-220dp"
+        android:top="-220dp"
+        android:gravity="top|start">
+
+        <shape android:shape="oval">
+
+            <size
+                android:width="650dp"
+                android:height="650dp"/>
+
+            <gradient
+                android:type="radial"
+                android:gradientRadius="340"
+                android:startColor="#552EA8FF"
+                android:endColor="#00000000"/>
+
+        </shape>
+    </item>
+
+    <!-- Green Glow (Far Lower Right) -->
+    <item
+        android:right="-240dp"
+        android:bottom="-240dp"
+        android:gravity="bottom|end">
+
+        <shape android:shape="oval">
+
+            <size
+                android:width="700dp"
+                android:height="700dp"/>
+
+            <gradient
+                android:type="radial"
+                android:gradientRadius="360"
+                android:startColor="#44144B3B"
+                android:endColor="#00000000"/>
+
+        </shape>
+    </item>
+
+    <!-- Premium Dark Overlay -->
+    <item>
+        <shape android:shape="rectangle">
+
+            <gradient
+                android:angle="90"
+                android:startColor="#14000000"
+                android:centerColor="#00000000"
+                android:endColor="#22000000"/>
+
+        </shape>
+    </item>
+
+</layer-list>

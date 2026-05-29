@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="@drawable/drawr">
+
+    <!-- Success Check Placeholder -->
+    <View
+        android:id="@+id/view_check_placeholder"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/skeleton_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Title Placeholder -->
+    <View
+        android:id="@+id/view_title_placeholder"
+        android:layout_width="250dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/skeleton_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_check_placeholder" />
+
+    <!-- Subtitle Placeholder -->
+    <View
+        android:id="@+id/view_subtitle_placeholder"
+        android:layout_width="200dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/skeleton_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_title_placeholder" />
+
+    <!-- Instruction Panel Placeholder -->
+    <View
+        android:id="@+id/view_panel_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/skeleton_bg"
+        app:layout_constraintTop_toBottomOf="@id/view_subtitle_placeholder" />
+
+    <!-- Buttons Placeholder -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/view_panel_placeholder">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/skeleton_bg" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1.2"
+            android:background="@drawable/skeleton_bg" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
