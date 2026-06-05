@@ -5,13 +5,23 @@ import java.util.List;
 
 public class MainResponseModel {
 
-    @SerializedName("id")
+    @SerializedName(value = "id", alternate = {"_id", "job_id", "jobId", "ID", "uuid", "pk", "key", "job", "analysis_id", "task_id", "record_id", "request_id", "uid"})
     private String id;
 
     @SerializedName("status")
     private String status;
 
-    @SerializedName("image_url")
+    @SerializedName(value = "image_url", alternate = {
+        "image", "imageUrl", "image_path", "img_url", "screenshot", 
+        "captured_image", "thumbnail", "img", "photo", "picture", 
+        "file_path", "url", "full_image", "result_image", "original_image", 
+        "media_url", "img_src", "preview", "preview_url", "screenshot_url",
+        "image_url_full", "image_url_thumb", "thumb", "thumbnail_url",
+        "image_file", "file", "path", "src", "original", "icon",
+        "Image", "ImageUrl", "Image_url", "IMAGE_URL", "URL", "FILE", "PATH",
+        "result_image_url", "input_image", "screenshot_path", "image_uri", "img_path",
+        "original_url", "image_url_path"
+    })
     private String imageUrl;
 
     @SerializedName("created_at")
@@ -20,7 +30,6 @@ public class MainResponseModel {
     @SerializedName("result")
     private ResultResponse result;
 
-    // Added fields for flat response structure
     @SerializedName("claim")
     private String claim;
 

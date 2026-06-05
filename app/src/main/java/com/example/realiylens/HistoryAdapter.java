@@ -2,6 +2,9 @@ package com.example.realiylens;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.example.realiylens.network.MainResponseModel;
 import com.example.realiylens.network.RetrofitClient;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -51,12 +56,22 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         String claim = item.getClaim();
         Double realityScore = item.getRealityScore();
         Double confidence = item.getConfidence();
+        String imageUrlStr = item.getImageUrl();
+
+        // Improved fallback logic for old records
+        boolean isImageUrlInvalid = imageUrlStr == null || imageUrlStr.isEmpty() || 
+                                   imageUrlStr.equalsIgnoreCase("null") || 
+                                   imageUrlStr.equalsIgnoreCase("undefined");
 
         if (item.getResult() != null) {
             if (verdict == null) verdict = item.getResult().getVerdict();
             if (claim == null) claim = item.getResult().getClaim();
             if (realityScore == null) realityScore = item.getResult().getRealityScore();
             if (confidence == null) confidence = item.getResult().getConfidence();
+            
+            if (isImageUrlInvalid) {
+                imageUrlStr = item.getResult().getImageUrl();
+            }
         }
 
         holder.tvVerdict.setText(verdict != null ? verdict.toUpperCase() : "ANALYZED");
@@ -65,7 +80,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         StringBuilder stats = new StringBuilder();
         if (realityScore != null) {
-            // Changed Score to Percentage
             stats.append("Reality: ").append((int)(realityScore * 100)).append("%");
         }
         if (confidence != null) {
@@ -82,12 +96,45 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         holder.tvTimestamp.setText(formatToIST(item.getCreatedAt()));
         
-        String imageUrl = RetrofitClient.getFullImageUrl(item.getImageUrl());
-        Glide.with(context)
-                .load(imageUrl)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_report_image)
-                .into(holder.ivThumbnail);
+        // Handle Base64 images or regular URLs
+        if (imageUrlStr != null && imageUrlStr.startsWith("data:image")) {
+            try {
+                String base64Data = imageUrlStr.substring(imageUrlStr.indexOf(",") + 1);
+                byte[] decodedString = Base64.decode(base64Data, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.ivThumbnail.setImageBitmap(decodedByte);
+            } catch (Exception e) {
+                holder.ivThumbnail.setImageResource(android.R.drawable.ic_menu_report_image);
+            }
+        } else {
+            String fullImageUrl = RetrofitClient.getFullImageUrl(imageUrlStr);
+            if (fullImageUrl != null && !fullImageUrl.isEmpty()) {
+                String token = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE).getString("access_token", "");
+                Object loadTarget = fullImageUrl;
+                
+                // Always try to add Auth headers for both new and old records
+                if (!token.isEmpty()) {
+                    loadTarget = new GlideUrl(fullImageUrl, new LazyHeaders.Builder()
+                            .addHeader("Authorization", "Bearer " + token)
+                            .build());
+                }
+
+                Glide.with(context)
+                        .load(loadTarget)
+                        .placeholder(android.R.drawable.ic_menu_gallery)
+                        .error(android.R.drawable.ic_menu_report_image)
+                        .into(holder.ivThumbnail);
+            } else {
+                // If still null, try one last resort: maybe the image is just "id.png" in the uploads folder
+                // This is a common pattern for legacy data
+                String fallbackUrl = RetrofitClient.getFullImageUrl("uploads/" + item.getId() + ".png");
+                Glide.with(context)
+                        .load(fallbackUrl)
+                        .placeholder(android.R.drawable.ic_menu_gallery)
+                        .error(android.R.drawable.ic_menu_gallery) // Keep gallery if fallback also fails
+                        .into(holder.ivThumbnail);
+            }
+        }
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, VerificationResultActivity.class);

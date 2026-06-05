@@ -21,7 +21,8 @@
         <item name="buttonGradientEnd">#050505</item>
         <item name="buttonStroke">#4FC3F7</item>
 
-        <item name="inputBgColor">#0DFFFFFF</item>
+        <!-- Subtle Glass Effect for Dark Mode -->
+        <item name="inputBgColor">#1AFFFFFF</item>
         <item name="inputStrokeColor">#33FFFFFF</item>
 
         <item name="gradientStart">#020617</item>

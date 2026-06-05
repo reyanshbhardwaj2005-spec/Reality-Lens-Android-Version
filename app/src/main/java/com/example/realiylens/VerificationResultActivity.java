@@ -3,11 +3,13 @@ package com.example.realiylens;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.example.realiylens.network.MainResponseModel;
 import com.example.realiylens.network.ResultResponse;
 import com.example.realiylens.network.RetrofitClient;
@@ -90,13 +94,7 @@ public class VerificationResultActivity extends AppCompatActivity {
         ImageView ivEnlarged = dialog.findViewById(R.id.iv_enlarged_image);
         ImageButton btnClose = dialog.findViewById(R.id.btn_close_dialog);
 
-        // Fixed image loading with full URL
-        String fullUrl = RetrofitClient.getFullImageUrl(imageUrl);
-        Glide.with(this)
-                .load(fullUrl)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_report_image)
-                .into(ivEnlarged);
+        loadImageIntoView(imageUrl, ivEnlarged);
 
         btnClose.setOnClickListener(v -> dialog.dismiss());
         ivEnlarged.setOnClickListener(v -> dialog.dismiss());
@@ -154,7 +152,6 @@ public class VerificationResultActivity extends AppCompatActivity {
     }
 
     private void displayData(MainResponseModel responseModel) {
-        // Fetch data from flat fields (new API structure)
         String verdict = responseModel.getVerdict();
         String claim = responseModel.getClaim();
         Double confidence = responseModel.getConfidence();
@@ -163,27 +160,23 @@ public class VerificationResultActivity extends AppCompatActivity {
         List<ResultResponse.EvidenceItem> evidenceItems = responseModel.getEvidence();
         currentImageUrl = responseModel.getImageUrl();
 
-        // Fallback to nested result object if flat fields are null (backward compatibility)
-        if (verdict == null && responseModel.getResult() != null) {
-            verdict = responseModel.getResult().getVerdict();
-        }
-        if (claim == null && responseModel.getResult() != null) {
-            claim = responseModel.getResult().getClaim();
-        }
-        if (confidence == null && responseModel.getResult() != null) {
-            confidence = responseModel.getResult().getConfidence();
-        }
-        if (realityScore == null && responseModel.getResult() != null) {
-            realityScore = responseModel.getResult().getRealityScore();
-        }
-        if (explanation == null && responseModel.getResult() != null) {
-            explanation = responseModel.getResult().getExplanation();
-        }
-        if (evidenceItems == null && responseModel.getResult() != null) {
-            evidenceItems = responseModel.getResult().getEvidence();
+        // Robust fallback for older records
+        boolean isImageUrlInvalid = currentImageUrl == null || currentImageUrl.isEmpty() || 
+                                   currentImageUrl.equalsIgnoreCase("null") || 
+                                   currentImageUrl.equalsIgnoreCase("undefined");
+
+        if (responseModel.getResult() != null) {
+            if (verdict == null) verdict = responseModel.getResult().getVerdict();
+            if (claim == null) claim = responseModel.getResult().getClaim();
+            if (confidence == null) confidence = responseModel.getResult().getConfidence();
+            if (realityScore == null) realityScore = responseModel.getResult().getRealityScore();
+            if (explanation == null) explanation = responseModel.getResult().getExplanation();
+            if (evidenceItems == null) evidenceItems = responseModel.getResult().getEvidence();
+            if (isImageUrlInvalid) {
+                currentImageUrl = responseModel.getResult().getImageUrl();
+            }
         }
 
-        // Set Verdict with dynamic color
         if (verdict != null) {
             tvVerdict.setText(verdict.toUpperCase());
             applyVerdictColor(verdict);
@@ -192,12 +185,10 @@ public class VerificationResultActivity extends AppCompatActivity {
             tvVerdict.setTextColor(ContextCompat.getColor(this, R.color.white));
         }
 
-        // Set Claim
         if (tvClaim != null) {
             tvClaim.setText(claim != null ? claim : "No captured claim available");
         }
         
-        // Set Confidence
         if (confidence != null) {
             int confValue = (int)(confidence * 100);
             tvConfidence.setText(confValue + "%");
@@ -209,7 +200,6 @@ public class VerificationResultActivity extends AppCompatActivity {
             if (pbConfidence != null) pbConfidence.setProgress(0);
         }
         
-        // Set Reality Score as percentage
         if (realityScore != null) {
             int realityPercent = (int)(realityScore * 100);
             tvRealityScore.setText(realityPercent + "%");
@@ -221,52 +211,75 @@ public class VerificationResultActivity extends AppCompatActivity {
             if (pbRealityScore != null) pbRealityScore.setProgress(0);
         }
         
-        // Set Explanation
         tvExplanation.setText(explanation != null ? explanation : "No explanation available.");
         
-        // Populate Evidence List
         llEvidenceContainer.removeAllViews();
         if (evidenceItems != null && !evidenceItems.isEmpty()) {
             LayoutInflater inflater = LayoutInflater.from(this);
             for (ResultResponse.EvidenceItem item : evidenceItems) {
                 View itemView = inflater.inflate(R.layout.item_evidence, llEvidenceContainer, false);
-                
                 TextView tvTitle = itemView.findViewById(R.id.tv_evidence_title);
                 TextView tvSource = itemView.findViewById(R.id.tv_evidence_source);
-                
                 tvTitle.setText(item.getTitle() != null ? item.getTitle() : "No Title");
                 tvSource.setText("Source: " + (item.getSource() != null ? item.getSource() : "Unknown"));
-
                 itemView.setOnClickListener(v -> {
                     if (item.getUrl() != null && !item.getUrl().isEmpty()) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getUrl()));
-                        startActivity(browserIntent);
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getUrl())));
                     } else {
                         Toast.makeText(this, "Link not available", Toast.LENGTH_SHORT).show();
                     }
                 });
-
                 llEvidenceContainer.addView(itemView);
             }
         } else {
             TextView tvEmpty = new TextView(this);
             tvEmpty.setText("No evidence found.");
-            try {
-                tvEmpty.setTextColor(ContextCompat.getColor(this, R.color.white));
-            } catch (Exception e) {
-                // Ignore
-            }
+            tvEmpty.setTextColor(ContextCompat.getColor(this, R.color.white));
             llEvidenceContainer.addView(tvEmpty);
         }
 
-        // Load Result Image - Fixed with full URL
-        String fullImageUrl = RetrofitClient.getFullImageUrl(currentImageUrl);
-        if (fullImageUrl != null) {
+        loadImageIntoView(currentImageUrl, ivResultImage);
+    }
+
+    private void loadImageIntoView(String imageUrl, ImageView imageView) {
+        // Handle Base64 images
+        if (imageUrl != null && imageUrl.startsWith("data:image")) {
+            try {
+                String base64Data = imageUrl.substring(imageUrl.indexOf(",") + 1);
+                byte[] decodedString = Base64.decode(base64Data, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                imageView.setImageBitmap(decodedByte);
+            } catch (Exception e) {
+                imageView.setImageResource(android.R.drawable.ic_menu_report_image);
+            }
+            return;
+        }
+
+        String fullImageUrl = RetrofitClient.getFullImageUrl(imageUrl);
+        if (fullImageUrl != null && !fullImageUrl.isEmpty()) {
+            SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+            String token = prefs.getString("access_token", "");
+            
+            Object loadTarget = fullImageUrl;
+            if (!token.isEmpty()) {
+                loadTarget = new GlideUrl(fullImageUrl, new LazyHeaders.Builder()
+                        .addHeader("Authorization", "Bearer " + token)
+                        .build());
+            }
+
             Glide.with(this)
-                    .load(fullImageUrl)
+                    .load(loadTarget)
                     .placeholder(android.R.drawable.ic_menu_gallery)
                     .error(android.R.drawable.ic_menu_report_image)
-                    .into(ivResultImage);
+                    .into(imageView);
+        } else if (jobId != null) {
+            // Fallback for older records: try uploads/jobId.png
+            String fallbackUrl = RetrofitClient.getFullImageUrl("uploads/" + jobId + ".png");
+            Glide.with(this)
+                    .load(fallbackUrl)
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .error(android.R.drawable.ic_menu_gallery)
+                    .into(imageView);
         }
     }
 
@@ -274,26 +287,15 @@ public class VerificationResultActivity extends AppCompatActivity {
         if (verdict == null) return;
         int colorRes = R.color.white;
         String v = verdict.toUpperCase();
-        
-        if (v.contains("LIKELY REAL") || v.equals("REAL")) {
-            colorRes = R.color.verdict_real;
-        } else if (v.contains("LIKELY FAKE") || v.equals("FAKE")) {
-            colorRes = R.color.verdict_fake;
-        } else if (v.contains("SUSPICIOUS")) {
-            colorRes = R.color.verdict_suspicious;
-        } else if (v.contains("UNVERIFIED")) {
-            colorRes = R.color.verdict_unverified;
-        } else if (v.contains("UNREADABLE")) {
-            colorRes = R.color.verdict_unreadable;
-        } else if (v.contains("SATIRE")) {
-            colorRes = R.color.verdict_satire;
-        }
-        
+        if (v.contains("LIKELY REAL") || v.equals("REAL")) colorRes = R.color.verdict_real;
+        else if (v.contains("LIKELY FAKE") || v.equals("FAKE")) colorRes = R.color.verdict_fake;
+        else if (v.contains("SUSPICIOUS")) colorRes = R.color.verdict_suspicious;
+        else if (v.contains("UNVERIFIED")) colorRes = R.color.verdict_unverified;
+        else if (v.contains("UNREADABLE")) colorRes = R.color.verdict_unreadable;
+        else if (v.contains("SATIRE")) colorRes = R.color.verdict_satire;
         int color = ContextCompat.getColor(this, colorRes);
         tvVerdict.setTextColor(color);
-        if (pbRealityScore != null) {
-            pbRealityScore.setIndicatorColor(color);
-        }
+        if (pbRealityScore != null) pbRealityScore.setIndicatorColor(color);
     }
 
     @Override
