@@ -14,7 +14,7 @@
 
         <!-- Back Button -->
         <LinearLayout
-            android:id="@+id/ll_back_dashboard"
+            android:id="@+id/ll_back_about"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -32,7 +32,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Back to Dashboard"
+                android:text="Back"
                 android:textColor="?attr/textSecondary"
                 android:textSize="16sp"
                 android:layout_marginStart="8dp"/>
@@ -42,31 +42,30 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Settings"
+            android:text="About Us"
             android:textColor="?attr/textPrimary"
             android:textStyle="bold"
-            android:textSize="32sp"/>
+            android:textSize="32sp"
+            android:layout_marginBottom="8dp"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Manage your RealityLens preferences"
+            android:text="Meet the team behind Reality Lens"
             android:textColor="?attr/textSecondary"
             android:textSize="16sp"
-            android:layout_marginTop="6dp"
             android:layout_marginBottom="32dp"/>
 
-        <!-- Appearance Title -->
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Appearance"
-            android:textColor="?attr/textPrimary"
-            android:textStyle="bold"
-            android:textSize="22sp"
-            android:layout_marginBottom="14dp"/>
+            android:text="Reality Lens is a fact-checking application developed by a team of three students of IIIT SONEPAT that helps users verify the authenticity of information shared through screenshots."
+            android:textColor="?attr/textSecondary"
+            android:textSize="15sp"
+            android:layout_marginBottom="32dp"
+            android:lineSpacingExtra="5dp"/>
 
-        <!-- Dark Mode Card -->
+        <!-- Member 1: Reyansh Bhardwaj -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,98 +74,28 @@
             app:cardElevation="0dp"
             app:strokeColor="?attr/cardStrokeColor"
             app:strokeWidth="1dp"
-            android:layout_marginBottom="28dp">
+            android:layout_marginBottom="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
                 android:orientation="horizontal"
+                android:padding="16dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/secondary_btn_bg">
 
-                <!-- Icon -->
-                <LinearLayout
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/outline_dark_mode_24"
-                        app:tint="?attr/textPrimary" />
-                </LinearLayout>
-
-                <!-- Text -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Dark Mode"
-                        android:textColor="?attr/textPrimary"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Use dark theme throughout the app"
-                        android:textColor="?attr/textSecondary"
-                        android:textSize="14sp"
-                        android:layout_marginTop="4dp"/>
-                </LinearLayout>
-
-                <!-- Switch -->
-                <Switch
-                    android:id="@+id/switchDarkMode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- About Us Selection Button (Card) -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_about_us"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="18dp"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardElevation="0dp"
-            app:strokeColor="?attr/cardStrokeColor"
-            app:strokeWidth="1dp"
-            android:layout_marginBottom="28dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:orientation="horizontal"
-                android:gravity="top"
-                android:background="@drawable/secondary_btn_bg">
-
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     app:cardCornerRadius="12dp"
-                    app:cardBackgroundColor="#2C2C2E"
                     app:cardElevation="0dp"
                     app:strokeWidth="0dp">
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/baseline_info_24"
-                        app:tint="@color/white" />
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/reyansh"
+                        android:scaleType="centerCrop"
+                       />
                 </com.google.android.material.card.MaterialCardView>
 
                 <LinearLayout
@@ -179,7 +108,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="About RealityLens"
+                        android:text="Reyansh Bhardwaj"
                         android:textColor="?attr/textPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold"/>
@@ -187,81 +116,181 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Version 1.0.0"
+                        android:text="reyanshbhardwaj.2005@gmail.com"
                         android:textColor="?attr/textSecondary"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
+                        android:layout_marginTop="2dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+91 9045111821"
+                        android:textColor="?attr/textSecondary"
+                        android:textSize="12sp"
                         android:layout_marginTop="2dp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="AI-powered fact verification for the modern internet. Built with cutting-edge technology to help you navigate truth in a complex information landscape."
+                        android:text="Lead Android Developer &amp; Frontend Architect responsible for core system design."
                         android:textColor="?attr/textSecondary"
-                        android:textSize="13sp"
-                        android:layout_marginTop="12dp"
-                        android:lineSpacingExtra="2dp"/>
+                        android:textSize="11sp"
+                        android:layout_marginTop="6dp"
+                        android:alpha="0.8"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Logout Card -->
+        <!-- Member 2: Hannu Verma -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="18dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardElevation="0dp"
-            app:strokeColor="#8B0000"
+            app:strokeColor="?attr/cardStrokeColor"
             app:strokeWidth="1dp"
-            android:layout_marginBottom="28dp"
-            android:clickable="true"
-            android:focusable="true">
+            android:layout_marginBottom="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="20dp"
+                android:padding="16dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/secondary_btn_bg">
 
-                <LinearLayout
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:gravity="center">
-
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp">
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_lock_power_off"
-                        app:tint="#FF5A5A" />
-                </LinearLayout>
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/hannu"
+                        android:scaleType="centerCrop"
+                        />
+                </com.google.android.material.card.MaterialCardView>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical"
                     android:layout_marginStart="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Logout"
-                        android:textColor="#FF5A5A"
-                        android:textSize="20sp"
+                        android:text="Hannu Verma"
+                        android:textColor="?attr/textPrimary"
+                        android:textSize="18sp"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sign out of your account"
-                        android:textColor="#FF5A5A"
-                        android:textSize="14sp"/>
+                        android:text="hannuverma78@gmail.com"
+                        android:textColor="?attr/textSecondary"
+                        android:textSize="12sp"
+                        android:layout_marginTop="2dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+91 9416680146"
+                        android:textColor="?attr/textSecondary"
+                        android:textSize="12sp"
+                        android:layout_marginTop="2dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Research &amp; Backend specialist ensuring data accuracy and API performance."
+                        android:textColor="?attr/textSecondary"
+                        android:textSize="11sp"
+                        android:layout_marginTop="6dp"
+                        android:alpha="0.8"/>
                 </LinearLayout>
-
             </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
+        <!-- Member 3: Shivanshu Mangal -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="18dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp"
+            app:strokeColor="?attr/cardStrokeColor"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/secondary_btn_bg">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/shivanshu"
+                        android:scaleType="centerCrop"
+                        />
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Shivanshu Mangal"
+                        android:textColor="?attr/textPrimary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="shivanshumangal007@gmail.com"
+                        android:textColor="?attr/textSecondary"
+                        android:textSize="12sp"
+                        android:layout_marginTop="2dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+91 8439903370"
+                        android:textColor="?attr/textSecondary"
+                        android:textSize="12sp"
+                        android:layout_marginTop="2dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="UI/UX Designer and Frontend optimization expert for the Reality Lens application."
+                        android:textColor="?attr/textSecondary"
+                        android:textSize="11sp"
+                        android:layout_marginTop="6dp"
+                        android:alpha="0.8"/>
+                </LinearLayout>
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>

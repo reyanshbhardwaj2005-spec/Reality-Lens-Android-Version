@@ -89,6 +89,8 @@ public class DashboardActivity extends AppCompatActivity {
                 logout();
             } else if (id == R.id.nav_settings) {
                 startActivity(new Intent(DashboardActivity.this, SettingsActivity.class));
+            } else if (id == R.id.nav_about_us) {
+                startActivity(new Intent(DashboardActivity.this, AboutUsActivity.class));
             }
             drawerLayout.closeDrawer(GravityCompat.END);
             return false;
