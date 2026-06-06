@@ -34,7 +34,7 @@ public class DashboardActivity extends AppCompatActivity {
     private LinearProgressIndicator progressBar;
     private RecyclerView rvVerifications;
     private HistoryAdapter historyAdapter;
-    private LinearLayout llSkeletonContainer;
+    private LinearLayout llSkeletonContainer, llEmptyState;
     private TextView tvUserUsername, tvUserEmail;
 
     private final BroadcastReceiver statusReceiver = new BroadcastReceiver() {
@@ -59,6 +59,7 @@ public class DashboardActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.pb_dashboard_loading);
         rvVerifications = findViewById(R.id.rv_verifications);
         llSkeletonContainer = findViewById(R.id.ll_skeleton_container);
+        llEmptyState = findViewById(R.id.ll_empty_state);
         ImageButton btnMenu = findViewById(R.id.btn_hamburger_menu);
         NavigationView navigationView = findViewById(R.id.nav_view_sidebar);
         
@@ -156,12 +157,20 @@ public class DashboardActivity extends AppCompatActivity {
         RetrofitClient.getApiService().getHistory("Bearer " + token).enqueue(new Callback<List<MainResponseModel>>() {
             @Override
             public void onResponse(Call<List<MainResponseModel>> call, Response<List<MainResponseModel>> response) {
+                llSkeletonContainer.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null) {
-                    llSkeletonContainer.setVisibility(View.GONE);
-                    rvVerifications.setVisibility(View.VISIBLE);
-                    historyAdapter.setItems(response.body());
+                    List<MainResponseModel> history = response.body();
+                    if (history.isEmpty()) {
+                        rvVerifications.setVisibility(View.GONE);
+                        llEmptyState.setVisibility(View.VISIBLE);
+                    } else {
+                        rvVerifications.setVisibility(View.VISIBLE);
+                        llEmptyState.setVisibility(View.GONE);
+                        historyAdapter.setItems(history);
+                    }
                 } else {
-                    llSkeletonContainer.setVisibility(View.GONE);
+                    rvVerifications.setVisibility(View.GONE);
+                    llEmptyState.setVisibility(View.VISIBLE);
                     if (response.code() == 401) logout();
                 }
             }
@@ -169,6 +178,8 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<MainResponseModel>> call, Throwable t) {
                 llSkeletonContainer.setVisibility(View.GONE);
+                rvVerifications.setVisibility(View.GONE);
+                llEmptyState.setVisibility(View.VISIBLE);
             }
         });
     }

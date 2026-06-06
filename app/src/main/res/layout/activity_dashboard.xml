@@ -94,6 +94,48 @@
             app:layout_constraintTop_toBottomOf="@id/tv_recent_verifications_label"
             tools:listitem="@layout/item_recent_verification" />
 
+        <!-- Encouraging Empty State Message -->
+        <LinearLayout
+            android:id="@+id/ll_empty_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_recent_verifications_label">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_nav_history"
+                app:tint="?attr/textPrimary"
+                android:alpha="0.2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Ready to verify? 🚀"
+                android:textColor="?attr/textPrimary"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="Capture any information on your screen to check its authenticity. We're here to help you find the truth! ✨"
+                android:textColor="?attr/textSecondary"
+                android:textSize="15sp"
+                android:alpha="0.9"
+                android:lineSpacingExtra="6dp" />
+
+        </LinearLayout>
+
         <!-- Skeleton Loading Container -->
         <LinearLayout
             android:id="@+id/ll_skeleton_container"
