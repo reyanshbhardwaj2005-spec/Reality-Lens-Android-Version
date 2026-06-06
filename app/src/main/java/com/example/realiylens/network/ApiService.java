@@ -10,6 +10,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
     @POST("login")
@@ -17,6 +18,14 @@ public interface ApiService {
 
     @POST("register")
     Call<LoginResponse> register(@Body RegisterRequest request);
+
+    /**
+     * Google Login Endpoint
+     * Path: auth/google
+     * Method: POST
+     */
+    @POST("auth/google")
+    Call<LoginResponse> googleLogin(@Body GoogleLoginRequest request);
 
     @GET("me")
     Call<UserResponse> getUserInfo(@Header("Authorization") String authHeader);

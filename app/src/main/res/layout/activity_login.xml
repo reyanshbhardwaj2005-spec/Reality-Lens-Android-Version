@@ -10,9 +10,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="36dp"
+        android:paddingHorizontal="40dp"
         android:paddingVertical="24dp"
         tools:context=".LoginActivity">
+
+        <ProgressBar
+            android:id="@+id/login_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:elevation="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <View
             android:id="@+id/logo_bg"

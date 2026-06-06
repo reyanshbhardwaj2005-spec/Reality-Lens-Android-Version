@@ -5,30 +5,33 @@
     android:background="@drawable/drawr"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="24dp"
     android:theme="@style/Theme.RealiyLens">
 
     <ImageView
+        android:id="@+id/iv_user_avatar"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@drawable/outline_account_circle_24"
-        android:id="@+id/iv_user_avatar" />
+        android:src="@drawable/ic_drawer_profile"
+        android:contentDescription="User Avatar"
+        android:alpha="0.9" />
 
     <TextView
+        android:id="@+id/tv_user_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
+        android:paddingTop="12dp"
         android:text="Reality Lens User"
         android:textColor="?attr/textPrimary"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textStyle="bold"
-        android:id="@+id/tv_user_username"/>
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="you@example.com"
-        android:textColor="?attr/textSecondary" />
+        android:textColor="?attr/textSecondary"
+        android:textSize="13sp" />
 
 </LinearLayout>

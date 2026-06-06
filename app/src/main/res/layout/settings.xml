@@ -26,7 +26,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@android:drawable/ic_media_previous"
+                android:src="@drawable/outline_arrow_back_24"
                 app:tint="?attr/textSecondary" />
 
             <TextView
@@ -92,9 +92,9 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_gallery"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/outline_dark_mode_24"
                         app:tint="?attr/textPrimary" />
                 </LinearLayout>
 
@@ -200,7 +200,8 @@
             app:cardBackgroundColor="@android:color/transparent"
             app:cardElevation="0dp"
             app:strokeColor="?attr/cardStrokeColor"
-            app:strokeWidth="1dp">
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="32dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -251,6 +252,85 @@
                         android:textColor="?attr/textSecondary"
                         android:textSize="14sp"
                         android:layout_marginTop="14dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Support Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Support"
+            android:textColor="?attr/textPrimary"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:layout_marginBottom="14dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="18dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp"
+            app:strokeColor="?attr/cardStrokeColor"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:orientation="vertical"
+                android:background="@drawable/secondary_btn_bg">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Complain an issue"
+                    android:textColor="?attr/textPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/outline_call_24"
+                        app:tint="?attr/textPrimary" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+91 9045111821"
+                        android:textColor="?attr/textSecondary"
+                        android:textSize="15sp"
+                        android:layout_marginStart="12dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_dialog_email"
+                        app:tint="?attr/textPrimary" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="reyanshbhardwaj.2005@gmail.com"
+                        android:textColor="?attr/textSecondary"
+                        android:textSize="15sp"
+                        android:layout_marginStart="12dp"/>
                 </LinearLayout>
 
             </LinearLayout>

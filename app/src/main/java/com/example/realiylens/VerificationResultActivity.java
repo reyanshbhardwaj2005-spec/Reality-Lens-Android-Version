@@ -76,13 +76,27 @@ public class VerificationResultActivity extends AppCompatActivity {
             finish();
         }
 
-        btnBack.setOnClickListener(v -> finish());
+        btnBack.setOnClickListener(v -> navigateBack());
 
         ivResultImage.setOnClickListener(v -> {
             if (currentImageUrl != null && !currentImageUrl.isEmpty()) {
                 showEnlargedImage(currentImageUrl);
             }
         });
+    }
+
+    private void navigateBack() {
+        if (isTaskRoot()) {
+            Intent intent = new Intent(this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateBack();
     }
 
     private void showEnlargedImage(String imageUrl) {

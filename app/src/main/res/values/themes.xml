@@ -19,8 +19,9 @@
         <item name="secondaryBackground">#FFFFFF</item>
         <item name="textPrimary">#1A1A1A</item>
         <item name="textSecondary">#64748B</item>
-        <item name="cardStrokeColor">#1A64748B</item>
+        <item name="cardStrokeColor">#DEE2E6</item>
         <item name="rippleColor">#1A000000</item>
+        <item name="skeletonColor">#CFD8DC</item>
 
         <item name="gradientStart">#F8FAFC</item>
         <item name="gradientCenter">#F1F5F9</item>
@@ -33,8 +34,8 @@
         <item name="buttonStroke">#4DFFFFFF</item>
 
         <!-- Ultra-light glass effect for inputs -->
-        <item name="inputBgColor">#1AFFFFFF</item>
-        <item name="inputStrokeColor">#33FFFFFF</item>
+        <item name="inputBgColor">#0D00D2FF</item>
+        <item name="inputStrokeColor">#1A00D2FF</item>
     </style>
 
     <style name="Theme.RealiyLens" parent="Base.Theme.RealiyLens" />

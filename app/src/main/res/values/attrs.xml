@@ -6,6 +6,7 @@
     <attr name="textSecondary" format="reference|color" />
     <attr name="cardStrokeColor" format="reference|color" />
     <attr name="rippleColor" format="reference|color" />
+    <attr name="skeletonColor" format="reference|color" />
 
     <!-- Material 3 Surface Attributes -->
     <attr name="surfaceTint" format="color|reference" />

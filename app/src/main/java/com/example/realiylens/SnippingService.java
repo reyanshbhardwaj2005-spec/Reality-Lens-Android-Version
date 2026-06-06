@@ -125,7 +125,7 @@ public class SnippingService extends Service {
 
         String mainText = message;
         if (confidence != null && realityScore != null) {
-            mainText = String.format("Confidence: %d%% | Reality Score: %.2f", (int)(confidence * 100), realityScore);
+            mainText = String.format("Confidence: %d%% | Reality Score: %d%%", (int)(confidence * 100), (int)(realityScore * 100));
         }
 
         Notification notification = new NotificationCompat.Builder(this, RESULT_CHANNEL_ID)
