@@ -176,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
                 StatusBarManager sbm = (StatusBarManager) getSystemService(Context.STATUS_BAR_SERVICE);
                 if (sbm != null) {
                     ComponentName cn = new ComponentName(this, SnippingTileService.class);
-                    sbm.requestAddTileService(cn, "Snip Area", Icon.createWithResource(this, R.drawable.icon), getMainExecutor(), res -> {
+                    sbm.requestAddTileService(cn, "Snip Area", Icon.createWithResource(this, R.drawable.logo), getMainExecutor(), res -> {
                         if (res == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED) 
                             prefs.edit().putBoolean("tile_requested", true).apply();
                     });

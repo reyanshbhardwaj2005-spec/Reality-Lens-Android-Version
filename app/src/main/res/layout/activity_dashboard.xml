@@ -44,7 +44,7 @@
                 android:background="@drawable/secondary_btn_bg"
                 android:drawableStart="@android:drawable/ic_menu_search"
                 android:drawablePadding="12dp"
-                android:hint="Search verifications..."
+                android:hint="Type text for verification"
                 android:paddingHorizontal="16dp"
                 android:textColor="?attr/textPrimary"
                 android:textColorHint="?attr/textSecondary"

@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     statusBarManager.requestAddTileService(
                             componentName,
                             "Snip Area",
-                            Icon.createWithResource(this, R.drawable.icon),
+                            Icon.createWithResource(this, R.drawable.logo),
                             getMainExecutor(),
                             result -> {
                                 prefs.edit().putBoolean(PREF_TILE_REQUESTED, true).apply();

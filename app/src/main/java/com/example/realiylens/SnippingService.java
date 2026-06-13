@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -33,13 +34,14 @@ import android.view.WindowMetrics;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import com.example.realiylens.network.MainResponseModel;
-import com.example.realiylens.network.ResultResponse;
 import com.example.realiylens.network.RetrofitClient;
 import com.example.realiylens.network.SubmitResponse;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -99,7 +101,7 @@ public class SnippingService extends Service {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setSmallIcon(R.drawable.icon)
+                .setSmallIcon(R.drawable.logo)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setOngoing(isOngoing)
                 .build();
@@ -123,28 +125,56 @@ public class SnippingService extends Service {
         }
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, flags);
 
-        String mainText = message;
+        String statsText = "";
         if (confidence != null && realityScore != null) {
-            mainText = String.format("Confidence: %d%% | Reality Score: %d%%", (int)(confidence * 100), (int)(realityScore * 100));
+            statsText = String.format("Confidence: %d%% | Reality Score: %d%%", (int)(confidence * 100), (int)(realityScore * 100));
         }
 
-        Notification notification = new NotificationCompat.Builder(this, RESULT_CHANNEL_ID)
-                .setContentTitle(title)
-                .setContentText(mainText)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .setBigContentTitle(title)
-                        .bigText(mainText + "\nTap to view full analysis."))
-                .setSmallIcon(R.drawable.icon)
+        int verdictColor = getVerdictColor(title);
+        
+        // Use HTML styling to force text color in notification
+        String hexColor = String.format("#%06X", (0xFFFFFF & verdictColor));
+        CharSequence styledTitle = title;
+        if (title != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                styledTitle = Html.fromHtml("<b><font color=\"" + hexColor + "\">" + title + "</font></b>", Html.FROM_HTML_MODE_LEGACY);
+            } else {
+                styledTitle = Html.fromHtml("<b><font color=\"" + hexColor + "\">" + title + "</font></b>");
+            }
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, RESULT_CHANNEL_ID)
+                .setContentTitle(styledTitle)
+                .setContentText(statsText)
+                .setSmallIcon(R.drawable.logo)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
-                .build();
+                .setColor(verdictColor)
+                .setColorized(true)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .setBigContentTitle(styledTitle)
+                        .bigText(statsText + "\nTap to view full analysis."));
+
+        Notification notification = builder.build();
 
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (manager != null) {
             manager.notify(RESULT_NOTIFICATION_ID, notification);
         }
+    }
+
+    private int getVerdictColor(String title) {
+        if (title == null) return ContextCompat.getColor(this, R.color.white);
+        String v = title.toUpperCase();
+        if (v.contains("REAL")) return ContextCompat.getColor(this, R.color.verdict_real);
+        if (v.contains("FAKE")) return ContextCompat.getColor(this, R.color.verdict_fake);
+        if (v.contains("SUSPICIOUS")) return ContextCompat.getColor(this, R.color.verdict_suspicious);
+        if (v.contains("UNVERIFIED")) return ContextCompat.getColor(this, R.color.verdict_unverified);
+        if (v.contains("UNREADABLE")) return ContextCompat.getColor(this, R.color.verdict_unreadable);
+        if (v.contains("SATIRE")) return ContextCompat.getColor(this, R.color.verdict_satire);
+        return ContextCompat.getColor(this, R.color.white);
     }
 
     private void setupOverlay() {
