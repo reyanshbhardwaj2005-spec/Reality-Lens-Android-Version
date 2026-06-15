@@ -40,6 +40,7 @@ public class VerificationResultActivity extends AppCompatActivity {
     private LinearProgressIndicator pbConfidence, pbRealityScore;
     private LinearLayout llEvidenceContainer;
     private ImageView ivResultImage;
+    private View cardImage; // Added to control visibility
     private LinearProgressIndicator progressBar;
     private String jobId;
     private String currentImageUrl;
@@ -58,6 +59,7 @@ public class VerificationResultActivity extends AppCompatActivity {
         tvVerdict = findViewById(R.id.tv_verdict);
         tvClaim = findViewById(R.id.tv_claim);
         ivResultImage = findViewById(R.id.iv_result_image);
+        cardImage = findViewById(R.id.card_image); // The CardView containing the image
         tvConfidence = findViewById(R.id.tv_confidence);
         tvRealityScore = findViewById(R.id.tv_reality_score);
         pbConfidence = findViewById(R.id.pb_confidence);
@@ -174,11 +176,7 @@ public class VerificationResultActivity extends AppCompatActivity {
         List<ResultResponse.EvidenceItem> evidenceItems = responseModel.getEvidence();
         currentImageUrl = responseModel.getImageUrl();
 
-        // Robust fallback for older records
-        boolean isImageUrlInvalid = currentImageUrl == null || currentImageUrl.isEmpty() || 
-                                   currentImageUrl.equalsIgnoreCase("null") || 
-                                   currentImageUrl.equalsIgnoreCase("undefined");
-
+        // Robust fallback for nested result models
         if (responseModel.getResult() != null) {
             if (verdict == null) verdict = responseModel.getResult().getVerdict();
             if (claim == null) claim = responseModel.getResult().getClaim();
@@ -186,9 +184,7 @@ public class VerificationResultActivity extends AppCompatActivity {
             if (realityScore == null) realityScore = responseModel.getResult().getRealityScore();
             if (explanation == null) explanation = responseModel.getResult().getExplanation();
             if (evidenceItems == null) evidenceItems = responseModel.getResult().getEvidence();
-            if (isImageUrlInvalid) {
-                currentImageUrl = responseModel.getResult().getImageUrl();
-            }
+            if (currentImageUrl == null) currentImageUrl = responseModel.getResult().getImageUrl();
         }
 
         if (verdict != null) {
@@ -206,9 +202,7 @@ public class VerificationResultActivity extends AppCompatActivity {
         if (confidence != null) {
             int confValue = (int)(confidence * 100);
             tvConfidence.setText(confValue + "%");
-            if (pbConfidence != null) {
-                pbConfidence.setProgress(confValue, true);
-            }
+            if (pbConfidence != null) pbConfidence.setProgress(confValue, true);
         } else {
             tvConfidence.setText("N/A");
             if (pbConfidence != null) pbConfidence.setProgress(0);
@@ -217,9 +211,7 @@ public class VerificationResultActivity extends AppCompatActivity {
         if (realityScore != null) {
             int realityPercent = (int)(realityScore * 100);
             tvRealityScore.setText(realityPercent + "%");
-            if (pbRealityScore != null) {
-                pbRealityScore.setProgress(realityPercent, true);
-            }
+            if (pbRealityScore != null) pbRealityScore.setProgress(realityPercent, true);
         } else {
             tvRealityScore.setText("N/A");
             if (pbRealityScore != null) pbRealityScore.setProgress(0);
@@ -227,6 +219,18 @@ public class VerificationResultActivity extends AppCompatActivity {
         
         tvExplanation.setText(explanation != null ? explanation : "No explanation available.");
         
+        // Hide image card if no image exists (common for text verification)
+        boolean hasImage = currentImageUrl != null && !currentImageUrl.isEmpty() && 
+                          !currentImageUrl.equalsIgnoreCase("null") && 
+                          !currentImageUrl.equalsIgnoreCase("undefined");
+        
+        if (hasImage) {
+            cardImage.setVisibility(View.VISIBLE);
+            loadImageIntoView(currentImageUrl, ivResultImage);
+        } else {
+            cardImage.setVisibility(View.GONE);
+        }
+
         llEvidenceContainer.removeAllViews();
         if (evidenceItems != null && !evidenceItems.isEmpty()) {
             LayoutInflater inflater = LayoutInflater.from(this);
@@ -251,12 +255,9 @@ public class VerificationResultActivity extends AppCompatActivity {
             tvEmpty.setTextColor(ContextCompat.getColor(this, R.color.white));
             llEvidenceContainer.addView(tvEmpty);
         }
-
-        loadImageIntoView(currentImageUrl, ivResultImage);
     }
 
     private void loadImageIntoView(String imageUrl, ImageView imageView) {
-        // Handle Base64 images
         if (imageUrl != null && imageUrl.startsWith("data:image")) {
             try {
                 String base64Data = imageUrl.substring(imageUrl.indexOf(",") + 1);
@@ -285,14 +286,6 @@ public class VerificationResultActivity extends AppCompatActivity {
                     .load(loadTarget)
                     .placeholder(android.R.drawable.ic_menu_gallery)
                     .error(android.R.drawable.ic_menu_report_image)
-                    .into(imageView);
-        } else if (jobId != null) {
-            // Fallback for older records: try uploads/jobId.png
-            String fallbackUrl = RetrofitClient.getFullImageUrl("uploads/" + jobId + ".png");
-            Glide.with(this)
-                    .load(fallbackUrl)
-                    .placeholder(android.R.drawable.ic_menu_gallery)
-                    .error(android.R.drawable.ic_menu_gallery)
                     .into(imageView);
         }
     }

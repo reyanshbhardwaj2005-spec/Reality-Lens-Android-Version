@@ -37,6 +37,12 @@ public interface ApiService {
             @Part MultipartBody.Part file
     );
 
+    @POST("submit-text")
+    Call<SubmitResponse> submitText(
+            @Header("Authorization") String authHeader,
+            @Body TextSubmitRequest request
+    );
+
     @GET("result/{job_id}")
     Call<MainResponseModel> getResult(
             @Header("Authorization") String authHeader,
