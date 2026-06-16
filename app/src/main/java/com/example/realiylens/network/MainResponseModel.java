@@ -1,14 +1,21 @@
 package com.example.realiylens.network;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainResponseModel {
 
-    @SerializedName(value = "id", alternate = {"_id", "job_id", "jobId", "ID", "uuid", "pk", "key", "job", "analysis_id", "task_id", "record_id", "request_id", "uid"})
+    @SerializedName(value = "id", alternate = {"_id", "job_id", "jobId", "ID", "uuid", "pk", "key", "job", "analysis_id", "task_id", "record_id", "request_id", "uid", "recordId"})
     private String id;
 
-    @SerializedName("status")
+    @SerializedName(value = "status", alternate = {"Status", "STATUS", "state", "job_status", "analysis_status"})
     private String status;
 
     @SerializedName(value = "image_url", alternate = {
@@ -20,82 +27,106 @@ public class MainResponseModel {
         "image_file", "file", "path", "src", "original", "icon",
         "Image", "ImageUrl", "Image_url", "IMAGE_URL", "URL", "FILE", "PATH",
         "result_image_url", "input_image", "screenshot_path", "image_uri", "img_path",
-        "original_url", "image_url_path"
+        "original_url", "image_url_path", "ImagePath", "ImgUrl"
     })
     private String imageUrl;
 
-    @SerializedName("created_at")
+    @SerializedName(value = "created_at", alternate = {"createdAt", "timestamp", "time", "date", "created", "CreatedAt", "Created_At", "date_created"})
     private String createdAt;
 
-    @SerializedName("result")
-    private ResultResponse result;
+    @SerializedName(value = "result", alternate = {"data", "analysis", "output", "response", "Result", "ResultData"})
+    private JsonElement result;
 
-    @SerializedName("claim")
+    @SerializedName(value = "claim", alternate = {"Claim", "CLAIM", "text", "content", "captured_text", "input_text", "input", "query"})
     private String claim;
 
-    @SerializedName("verdict")
+    @SerializedName(value = "verdict", alternate = {"Verdict", "VERDICT", "status_text", "final_verdict", "result_text", "classification"})
     private String verdict;
 
-    @SerializedName("confidence")
+    @SerializedName(value = "confidence", alternate = {"Confidence", "CONFIDENCE", "conf", "probability", "score"})
     private Double confidence;
 
-    @SerializedName("reality_score")
+    @SerializedName(value = "reality_score", alternate = {"realityScore", "RealityScore", "REALITY_SCORE", "authenticity_score", "truth_score"})
     private Double realityScore;
 
-    @SerializedName("explanation")
+    @SerializedName(value = "explanation", alternate = {"Explanation", "EXPLANATION", "reason", "summary", "description", "details"})
     private String explanation;
 
-    @SerializedName("evidence")
+    @SerializedName(value = "evidence", alternate = {"Evidence", "EVIDENCE", "sources", "links", "references", "supporting_evidence"})
     private List<ResultResponse.EvidenceItem> evidence;
 
-    @SerializedName("time_taken")
-    private Double timeTaken;
+    public String getId() { return id; }
+    public String getStatus() { return status; }
+    public String getCreatedAt() { return createdAt; }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getStatus() {
-        return status;
+    public ResultResponse getResult() {
+        if (result == null) return null;
+        Gson gson = new Gson();
+        if (result.isJsonObject()) {
+            return gson.fromJson(result, ResultResponse.class);
+        } else if (result.isJsonArray()) {
+            JsonArray arr = result.getAsJsonArray();
+            if (arr.size() > 0 && arr.get(0).isJsonObject()) {
+                return gson.fromJson(arr.get(0), ResultResponse.class);
+            }
+        }
+        return null;
     }
 
     public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public ResultResponse getResult() {
-        return result;
+        if (imageUrl != null) return imageUrl;
+        ResultResponse res = getResult();
+        return res != null ? res.getImageUrl() : null;
     }
 
     public String getClaim() {
-        return claim;
+        if (claim != null) return claim;
+        ResultResponse res = getResult();
+        return res != null ? res.getClaim() : null;
     }
 
     public String getVerdict() {
-        return verdict;
+        if (verdict != null) return verdict;
+        ResultResponse res = getResult();
+        return res != null ? res.getVerdict() : null;
     }
 
     public Double getConfidence() {
-        return confidence;
+        if (confidence != null) return confidence;
+        ResultResponse res = getResult();
+        return res != null ? res.getConfidence() : null;
     }
 
     public Double getRealityScore() {
-        return realityScore;
+        if (realityScore != null) return realityScore;
+        ResultResponse res = getResult();
+        return res != null ? res.getRealityScore() : null;
     }
 
     public String getExplanation() {
-        return explanation;
+        if (explanation != null) return explanation;
+        ResultResponse res = getResult();
+        return res != null ? res.getExplanation() : null;
     }
 
     public List<ResultResponse.EvidenceItem> getEvidence() {
-        return evidence;
+        if (evidence != null) return evidence;
+        ResultResponse res = getResult();
+        return res != null ? res.getEvidence() : null;
     }
 
-    public Double getTimeTaken() {
-        return timeTaken;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MainResponseModel that = (MainResponseModel) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(status, that.status) &&
+                Objects.equals(verdict, that.getVerdict());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, status, verdict);
     }
 }

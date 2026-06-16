@@ -58,6 +58,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".HistoryActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".VerificationResultActivity"
             android:exported="false" />
 

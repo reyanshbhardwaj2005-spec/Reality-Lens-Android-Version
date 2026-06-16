@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Dark Gradient Background -->
+    <item>
+        <shape>
+            <gradient
+                android:angle="315"
+                android:startColor="#0B3A6E"
+                android:centerColor="#162B6F"
+                android:endColor="#1A1F5C"/>
+        </shape>
+    </item>
+
+    <!-- Soft Glow -->
+    <item
+        android:left="30dp"
+        android:top="60dp">
+        <shape android:shape="oval">
+            <size
+                android:width="280dp"
+                android:height="280dp"/>
+
+            <gradient
+                android:type="radial"
+                android:gradientRadius="140dp"
+                android:startColor="#15FFFFFF"
+                android:endColor="#00FFFFFF"/>
+        </shape>
+    </item>
+
+</layer-list>

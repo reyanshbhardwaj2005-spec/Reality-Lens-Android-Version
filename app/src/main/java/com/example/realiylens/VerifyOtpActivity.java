@@ -66,8 +66,8 @@ public class VerifyOtpActivity extends AppCompatActivity {
                     
                     Toast.makeText(VerifyOtpActivity.this, "OTP Verified Successfully", Toast.LENGTH_SHORT).show();
                     
-                    // Proceed to WelcomeActivity to show success and fetch user info
-                    Intent intent = new Intent(VerifyOtpActivity.this, WelcomeActivity.class);
+                    // Proceed directly to DashboardActivity
+                    Intent intent = new Intent(VerifyOtpActivity.this, DashboardActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();

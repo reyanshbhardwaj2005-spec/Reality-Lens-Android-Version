@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         String savedToken = prefs.getString("access_token", null);
         if (savedToken != null && !savedToken.isEmpty()) {
-            startActivity(new Intent(this, WelcomeActivity.class));
+            startActivity(new Intent(this, DashboardActivity.class));
             finish();
             return;
         }

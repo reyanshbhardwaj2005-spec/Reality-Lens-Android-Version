@@ -67,7 +67,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 handleError("ID Token missing from intent");
             }
         } else {
-            fetchUserInfoAndShow();
+            fetchUserInfoAndRedirect();
         }
 
         Button btnOpenDashboard = findViewById(R.id.btn_open_dashboard);
@@ -76,6 +76,7 @@ public class WelcomeActivity extends AppCompatActivity {
         if (btnOpenDashboard != null) {
             btnOpenDashboard.setOnClickListener(v -> {
                 startActivity(new Intent(WelcomeActivity.this, DashboardActivity.class));
+                finish();
             });
         }
 
@@ -93,7 +94,7 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     saveToken(response.body().getAccessToken());
-                    fetchUserInfoAndShow();
+                    fetchUserInfoAndRedirect();
                 } else {
                     handleError("Google Auth Failed: " + response.code());
                 }
@@ -156,7 +157,7 @@ public class WelcomeActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchUserInfoAndShow() {
+    private void fetchUserInfoAndRedirect() {
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         String token = prefs.getString("access_token", "");
         if (token.isEmpty()) {
@@ -169,10 +170,10 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    UserResponse user = response.body();
-                    String name = user.getUsername() != null ? user.getUsername() : "User";
-                    if (tvStatus != null) tvStatus.setText("Welcome back, " + name);
-                    showContent();
+                    // Redirect directly to DashboardActivity
+                    Intent intent = new Intent(WelcomeActivity.this, DashboardActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else {
                     handleError("Session expired: " + response.code());
                 }
@@ -203,14 +204,5 @@ public class WelcomeActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
-    }
-
-    private void showContent() {
-        if (skeleton != null && content != null) {
-            skeleton.setVisibility(View.GONE);
-            content.setVisibility(View.VISIBLE);
-            content.setAlpha(0f);
-            content.animate().alpha(1f).setDuration(400).start();
-        }
     }
 }

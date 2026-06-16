@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <gradient
-        android:angle="315"
+        android:angle="135"
         android:startColor="?attr/gradientStart"
         android:centerColor="?attr/gradientCenter"
-        android:endColor="?attr/gradientEnd"/>
+        android:endColor="?attr/gradientEnd"
+        android:type="linear" />
 </shape>

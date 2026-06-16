@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -23,22 +24,46 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
     private final Context context;
     private List<MainResponseModel> items = new ArrayList<>();
+    private final Map<String, SimpleDateFormat> sdfCache = new HashMap<>();
 
     public HistoryAdapter(Context context) {
         this.context = context;
     }
 
     public void setItems(List<MainResponseModel> newItems) {
-        this.items = newItems != null ? newItems : new ArrayList<>();
-        notifyDataSetChanged();
+        if (newItems == null) newItems = new ArrayList<>();
+        
+        // Using DiffUtil for better performance and smoother updates
+        final List<MainResponseModel> finalNewItems = newItems;
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() { return items.size(); }
+            @Override
+            public int getNewListSize() { return finalNewItems.size(); }
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                String oldId = items.get(oldItemPosition).getId();
+                String newId = finalNewItems.get(newItemPosition).getId();
+                return oldId != null && oldId.equals(newId);
+            }
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                return items.get(oldItemPosition).equals(finalNewItems.get(newItemPosition));
+            }
+        });
+        
+        this.items = new ArrayList<>(newItems);
+        result.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -58,18 +83,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         Double confidence = item.getConfidence();
         String imageUrlStr = item.getImageUrl();
 
-        // Improved fallback logic for old records
-        boolean isImageUrlInvalid = imageUrlStr == null || imageUrlStr.isEmpty() || 
-                                   imageUrlStr.equalsIgnoreCase("null") || 
-                                   imageUrlStr.equalsIgnoreCase("undefined");
-
         if (item.getResult() != null) {
             if (verdict == null) verdict = item.getResult().getVerdict();
             if (claim == null) claim = item.getResult().getClaim();
             if (realityScore == null) realityScore = item.getResult().getRealityScore();
             if (confidence == null) confidence = item.getResult().getConfidence();
-            
-            if (isImageUrlInvalid) {
+            if (imageUrlStr == null || imageUrlStr.isEmpty() || imageUrlStr.equals("null")) {
                 imageUrlStr = item.getResult().getImageUrl();
             }
         }
@@ -88,21 +107,20 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
         holder.tvStats.setText(stats.toString());
 
-        if (realityScore != null) {
-            holder.pbRealityScore.setProgress((int) (realityScore * 100));
-        } else {
-            holder.pbRealityScore.setProgress(0);
-        }
-
+        holder.pbRealityScore.setProgress(realityScore != null ? (int) (realityScore * 100) : 0);
         holder.tvTimestamp.setText(formatToIST(item.getCreatedAt()));
         
-        // Handle Base64 images or regular URLs
+        // Optimized Image Loading
         if (imageUrlStr != null && imageUrlStr.startsWith("data:image")) {
+            // Loading Base64 via Glide is more efficient as it handles decoding off-thread
             try {
                 String base64Data = imageUrlStr.substring(imageUrlStr.indexOf(",") + 1);
                 byte[] decodedString = Base64.decode(base64Data, Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                holder.ivThumbnail.setImageBitmap(decodedByte);
+                Glide.with(context)
+                        .asBitmap()
+                        .load(decodedString)
+                        .placeholder(android.R.drawable.ic_menu_gallery)
+                        .into(holder.ivThumbnail);
             } catch (Exception e) {
                 holder.ivThumbnail.setImageResource(android.R.drawable.ic_menu_report_image);
             }
@@ -112,7 +130,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 String token = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE).getString("access_token", "");
                 Object loadTarget = fullImageUrl;
                 
-                // Always try to add Auth headers for both new and old records
                 if (!token.isEmpty()) {
                     loadTarget = new GlideUrl(fullImageUrl, new LazyHeaders.Builder()
                             .addHeader("Authorization", "Bearer " + token)
@@ -125,14 +142,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                         .error(android.R.drawable.ic_menu_report_image)
                         .into(holder.ivThumbnail);
             } else {
-                // If still null, try one last resort: maybe the image is just "id.png" in the uploads folder
-                // This is a common pattern for legacy data
-                String fallbackUrl = RetrofitClient.getFullImageUrl("uploads/" + item.getId() + ".png");
-                Glide.with(context)
-                        .load(fallbackUrl)
-                        .placeholder(android.R.drawable.ic_menu_gallery)
-                        .error(android.R.drawable.ic_menu_gallery) // Keep gallery if fallback also fails
-                        .into(holder.ivThumbnail);
+                holder.ivThumbnail.setImageResource(android.R.drawable.ic_menu_gallery);
             }
         }
 
@@ -161,8 +171,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             Date date = null;
             for (String pattern : patterns) {
                 try {
-                    SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.getDefault());
-                    if (!pattern.contains("X")) sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    SimpleDateFormat sdf = sdfCache.get(pattern);
+                    if (sdf == null) {
+                        sdf = new SimpleDateFormat(pattern, Locale.getDefault());
+                        if (!pattern.contains("X")) sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                        sdfCache.put(pattern, sdf);
+                    }
                     date = sdf.parse(dateString);
                     if (date != null) break;
                 } catch (Exception ignored) {}
@@ -170,8 +184,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
             if (date == null) return dateString;
 
-            SimpleDateFormat outputFormat = new SimpleDateFormat("d MMM yyyy, h:mm a", Locale.getDefault());
-            outputFormat.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+            SimpleDateFormat outputFormat = sdfCache.get("OUT");
+            if (outputFormat == null) {
+                outputFormat = new SimpleDateFormat("d MMM yyyy, h:mm a", Locale.getDefault());
+                outputFormat.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+                sdfCache.put("OUT", outputFormat);
+            }
             return outputFormat.format(date);
         } catch (Exception e) {
             return dateString;

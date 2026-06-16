@@ -1,5 +1,6 @@
 package com.example.realiylens.network;
 
+import com.google.gson.JsonElement;
 import java.util.List;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -49,7 +50,7 @@ public interface ApiService {
     );
 
     @GET("history")
-    Call<List<MainResponseModel>> getHistory(
+    Call<JsonElement> getHistory(
             @Header("Authorization") String authHeader
     );
 }
