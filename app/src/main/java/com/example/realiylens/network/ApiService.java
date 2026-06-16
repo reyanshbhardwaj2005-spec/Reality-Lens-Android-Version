@@ -22,7 +22,8 @@ public interface ApiService {
     @POST("verify-otp")
     Call<LoginResponse> verifyOtp(@Body VerifyOtpRequest request);
 
-    @GET("login/google")
+    // This is the correct API endpoint for mobile Google Auth
+    @POST("auth/google")
     Call<LoginResponse> googleLogin(@Body GoogleLoginRequest request);
 
     @GET("me")

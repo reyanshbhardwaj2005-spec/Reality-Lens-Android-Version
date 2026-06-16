@@ -24,7 +24,6 @@ public class WelcomeActivity extends AppCompatActivity {
     private static final String TAG = "RealityLens_Welcome";
     private View skeleton, content;
     private TextView tvStatus;
-    private boolean isGoogleLoginFlow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +60,8 @@ public class WelcomeActivity extends AppCompatActivity {
             String password = getIntent().getStringExtra("password");
             performRegister(name, email, password);
         } else if ("google_login".equals(action)) {
-            isGoogleLoginFlow = true;
             String idToken = getIntent().getStringExtra("id_token");
             if (idToken != null) {
-                // Google ID Token Toast removed to restore original behavior
                 performGoogleLogin(idToken);
             } else {
                 handleError("ID Token missing from intent");
@@ -116,10 +113,8 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String tempToken = response.body().getAccessToken();
-                    // Store temporary token
                     getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().putString("temp_token", tempToken).apply();
                     
-                    // Redirect to OTP Verification Screen
                     Intent intent = new Intent(WelcomeActivity.this, VerifyOtpActivity.class);
                     intent.putExtra("temp_token", tempToken);
                     startActivity(intent);
@@ -141,39 +136,22 @@ public class WelcomeActivity extends AppCompatActivity {
         RetrofitClient.getApiService().register(registerRequest).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if (isGoogleLoginFlow) {
-                    isGoogleLoginFlow = false;
-                    // Shadow Registration for Google users:
-                    // If successful, we might get an updated token. If it fails (user exists), we continue with the Google login token.
-                    if (response.isSuccessful() && response.body() != null) {
-                        saveToken(response.body().getAccessToken());
-                    }
-                    fetchUserInfoAndShow();
+                if (response.isSuccessful() && response.body() != null) {
+                    String tempToken = response.body().getAccessToken();
+                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().putString("temp_token", tempToken).apply();
+                    
+                    Intent intent = new Intent(WelcomeActivity.this, VerifyOtpActivity.class);
+                    intent.putExtra("temp_token", tempToken);
+                    startActivity(intent);
+                    finish();
                 } else {
-                    // Manual Registration: Redirect to OTP Verification Screen (Same as Login)
-                    if (response.isSuccessful() && response.body() != null) {
-                        String tempToken = response.body().getAccessToken();
-                        // Store temporary token
-                        getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().putString("temp_token", tempToken).apply();
-                        
-                        Intent intent = new Intent(WelcomeActivity.this, VerifyOtpActivity.class);
-                        intent.putExtra("temp_token", tempToken);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        handleError("Registration failed: " + response.code());
-                    }
+                    handleError("Registration failed: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                if (isGoogleLoginFlow) {
-                    isGoogleLoginFlow = false;
-                    fetchUserInfoAndShow();
-                } else {
-                    handleError("Network error during registration: " + t.getMessage());
-                }
+                handleError("Network error during registration: " + t.getMessage());
             }
         });
     }
@@ -192,14 +170,9 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     UserResponse user = response.body();
-                    if (isGoogleLoginFlow) {
-                        // Shadow Registration using userId as password
-                        performRegister(user.getUsername(), user.getEmail(), user.getId());
-                    } else {
-                        String name = user.getUsername() != null ? user.getUsername() : "User";
-                        if (tvStatus != null) tvStatus.setText("Welcome back, " + name);
-                        showContent();
-                    }
+                    String name = user.getUsername() != null ? user.getUsername() : "User";
+                    if (tvStatus != null) tvStatus.setText("Welcome back, " + name);
+                    showContent();
                 } else {
                     handleError("Session expired: " + response.code());
                 }
@@ -221,7 +194,6 @@ public class WelcomeActivity extends AppCompatActivity {
         Log.e(TAG, message);
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         
-        // Clear all stored tokens to break circular redirect loops
         getSharedPreferences("AppPrefs", MODE_PRIVATE).edit()
                 .remove("access_token")
                 .remove("temp_token")
