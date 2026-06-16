@@ -19,12 +19,10 @@ public interface ApiService {
     @POST("register")
     Call<LoginResponse> register(@Body RegisterRequest request);
 
-    /**
-     * Google Login Endpoint
-     * Path: auth/google
-     * Method: POST
-     */
-    @POST("auth/google")
+    @POST("verify-otp")
+    Call<LoginResponse> verifyOtp(@Body VerifyOtpRequest request);
+
+    @GET("login/google")
     Call<LoginResponse> googleLogin(@Body GoogleLoginRequest request);
 
     @GET("me")

@@ -64,6 +64,7 @@ public class WelcomeActivity extends AppCompatActivity {
             isGoogleLoginFlow = true;
             String idToken = getIntent().getStringExtra("id_token");
             if (idToken != null) {
+                // Google ID Token Toast removed to restore original behavior
                 performGoogleLogin(idToken);
             } else {
                 handleError("ID Token missing from intent");
@@ -75,17 +76,20 @@ public class WelcomeActivity extends AppCompatActivity {
         Button btnOpenDashboard = findViewById(R.id.btn_open_dashboard);
         Button btnMinimize = findViewById(R.id.btn_minimize);
 
-        btnOpenDashboard.setOnClickListener(v -> {
-            startActivity(new Intent(WelcomeActivity.this, DashboardActivity.class));
-        });
+        if (btnOpenDashboard != null) {
+            btnOpenDashboard.setOnClickListener(v -> {
+                startActivity(new Intent(WelcomeActivity.this, DashboardActivity.class));
+            });
+        }
 
-        btnMinimize.setOnClickListener(v -> {
-            moveTaskToBack(true);
-        });
+        if (btnMinimize != null) {
+            btnMinimize.setOnClickListener(v -> {
+                moveTaskToBack(true);
+            });
+        }
     }
 
     private void performGoogleLogin(String idToken) {
-        // Created request object to match the POST method in ApiService
         GoogleLoginRequest request = new GoogleLoginRequest(idToken);
         RetrofitClient.getApiService().googleLogin(request).enqueue(new Callback<LoginResponse>() {
             @Override
@@ -94,13 +98,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     saveToken(response.body().getAccessToken());
                     fetchUserInfoAndShow();
                 } else {
-                    String errorMsg = "Google Login failed: " + response.code();
-                    if (response.errorBody() != null) {
-                        try {
-                            errorMsg += " - " + response.errorBody().string();
-                        } catch (Exception ignored) {}
-                    }
-                    handleError(errorMsg);
+                    handleError("Google Auth Failed: " + response.code());
                 }
             }
 
@@ -117,8 +115,15 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    saveToken(response.body().getAccessToken());
-                    fetchUserInfoAndShow();
+                    String tempToken = response.body().getAccessToken();
+                    // Store temporary token
+                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().putString("temp_token", tempToken).apply();
+                    
+                    // Redirect to OTP Verification Screen
+                    Intent intent = new Intent(WelcomeActivity.this, VerifyOtpActivity.class);
+                    intent.putExtra("temp_token", tempToken);
+                    startActivity(intent);
+                    finish();
                 } else {
                     handleError("Login failed: " + response.code());
                 }
@@ -126,7 +131,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                handleError("Network error: " + t.getMessage());
+                handleError("Connection error: " + t.getMessage());
             }
         });
     }
@@ -136,16 +141,27 @@ public class WelcomeActivity extends AppCompatActivity {
         RetrofitClient.getApiService().register(registerRequest).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    saveToken(response.body().getAccessToken());
+                if (isGoogleLoginFlow) {
                     isGoogleLoginFlow = false;
+                    // Shadow Registration for Google users:
+                    // If successful, we might get an updated token. If it fails (user exists), we continue with the Google login token.
+                    if (response.isSuccessful() && response.body() != null) {
+                        saveToken(response.body().getAccessToken());
+                    }
                     fetchUserInfoAndShow();
                 } else {
-                    if (isGoogleLoginFlow) {
-                        isGoogleLoginFlow = false;
-                        fetchUserInfoAndShow();
+                    // Manual Registration: Redirect to OTP Verification Screen (Same as Login)
+                    if (response.isSuccessful() && response.body() != null) {
+                        String tempToken = response.body().getAccessToken();
+                        // Store temporary token
+                        getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().putString("temp_token", tempToken).apply();
+                        
+                        Intent intent = new Intent(WelcomeActivity.this, VerifyOtpActivity.class);
+                        intent.putExtra("temp_token", tempToken);
+                        startActivity(intent);
+                        finish();
                     } else {
-                        handleError("Registration failed: " + response.message());
+                        handleError("Registration failed: " + response.code());
                     }
                 }
             }
@@ -156,7 +172,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     isGoogleLoginFlow = false;
                     fetchUserInfoAndShow();
                 } else {
-                    handleError("Network error: " + t.getMessage());
+                    handleError("Network error during registration: " + t.getMessage());
                 }
             }
         });
@@ -165,24 +181,33 @@ public class WelcomeActivity extends AppCompatActivity {
     private void fetchUserInfoAndShow() {
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         String token = prefs.getString("access_token", "");
-        String authHeader = "Bearer " + token;
+        if (token.isEmpty()) {
+            handleError("Auth token missing");
+            return;
+        }
 
+        String authHeader = "Bearer " + token;
         RetrofitClient.getApiService().getUserInfo(authHeader).enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     UserResponse user = response.body();
-                    String statusText = "Welcome back";
-                    if (tvStatus != null) tvStatus.setText(statusText);
-                    showContent();
+                    if (isGoogleLoginFlow) {
+                        // Shadow Registration using userId as password
+                        performRegister(user.getUsername(), user.getEmail(), user.getId());
+                    } else {
+                        String name = user.getUsername() != null ? user.getUsername() : "User";
+                        if (tvStatus != null) tvStatus.setText("Welcome back, " + name);
+                        showContent();
+                    }
                 } else {
-                    handleError("Failed to fetch user info: " + response.code());
+                    handleError("Session expired: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
-                handleError("Network error while fetching profile: " + t.getMessage());
+                handleError("Profile fetch failed: " + t.getMessage());
             }
         });
     }
@@ -193,8 +218,17 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void handleError(String message) {
+        Log.e(TAG, message);
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        
+        // Clear all stored tokens to break circular redirect loops
+        getSharedPreferences("AppPrefs", MODE_PRIVATE).edit()
+                .remove("access_token")
+                .remove("temp_token")
+                .apply();
+        
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

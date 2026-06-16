@@ -44,6 +44,11 @@
         </activity>
 
         <activity
+            android:name=".VerifyOtpActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible" />
+
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
 

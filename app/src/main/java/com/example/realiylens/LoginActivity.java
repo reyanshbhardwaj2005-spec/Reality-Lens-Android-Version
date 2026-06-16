@@ -1,5 +1,6 @@
 package com.example.realiylens;
 
+import android.app.Activity;
 import android.app.StatusBarManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -45,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        // This prints your SHA-1 to Logcat automatically!
+        // Debug tool: Prints the exact SHA-1 Google Console needs to Logcat
         printAppSignature();
 
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
@@ -58,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-        // Step 4: Request ID Token using the WEB CLIENT ID from console
+        // CONFIGURATION: Ensure default_web_client_id is the "Web application" ID from console
         String webClientId = getString(R.string.default_web_client_id);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -70,7 +71,9 @@ public class LoginActivity extends AppCompatActivity {
         googleSignInLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
+                    Log.d(TAG, "onActivityResult: ResultCode = " + result.getResultCode());
                     setLoading(false);
+                    // Process result even if not OK to see actual error codes from Google
                     handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(result.getData()));
                 }
         );
@@ -85,12 +88,11 @@ public class LoginActivity extends AppCompatActivity {
 
         if (btnGoogle != null) {
             btnGoogle.setOnClickListener(v -> {
+                Log.d(TAG, "Google Sign-In button clicked");
                 setLoading(true);
-                // Step 1: User taps button
-                mGoogleSignInClient.signOut().addOnCompleteListener(task -> {
-                    // Step 2: Open account picker
-                    googleSignInLauncher.launch(mGoogleSignInClient.getSignInIntent());
-                });
+                // Launch picker directly to avoid potential signOut() hangs
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                googleSignInLauncher.launch(signInIntent);
             });
         }
 
@@ -126,23 +128,29 @@ public class LoginActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             if (account != null && account.getIdToken() != null) {
-                // Step 4: Android got ID Token. Step 5: Send to WelcomeActivity to call FastAPI
+                Log.d(TAG, "handleSignInResult: Successfully obtained ID Token");
                 Intent intent = new Intent(this, WelcomeActivity.class);
                 intent.putExtra("action", "google_login");
                 intent.putExtra("id_token", account.getIdToken());
                 startActivity(intent);
                 finish();
             } else {
-                Toast.makeText(this, "Error: Google returned no ID Token. Check Web Client ID.", Toast.LENGTH_LONG).show();
+                Log.w(TAG, "handleSignInResult: Account or ID Token is null");
+                Toast.makeText(this, "Error: Google returned no ID Token", Toast.LENGTH_LONG).show();
             }
         } catch (ApiException e) {
             int code = e.getStatusCode();
             Log.e(TAG, "Sign-in error: " + code + " - " + e.getMessage());
             String msg;
-            if (code == 10) msg = "Developer Error (10): Ensure SHA-1 and Web Client ID are correct in Google Console.";
-            else if (code == 12501) msg = "Sign-in cancelled.";
-            else if (code == 7) msg = "Network error. Check connection.";
-            else msg = "Sign-in failed (Error " + code + ")";
+            if (code == 10) {
+                msg = "Error 10: Developer Error. Verify SHA-1 in Console.";
+            } else if (code == 12501) {
+                msg = "Sign-in cancelled.";
+            } else if (code == 7) {
+                msg = "Network error. Check connection.";
+            } else {
+                msg = "Sign-in failed (Error " + code + ")";
+            }
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
     }
@@ -167,6 +175,7 @@ public class LoginActivity extends AppCompatActivity {
     private void setLoading(boolean isLoading) {
         if (progressBar != null) progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         if (btnGoogle != null) btnGoogle.setEnabled(!isLoading);
+        if (btnContinue != null) btnContinue.setEnabled(!isLoading);
     }
 
     private void requestAddQuickSettingsTile() {

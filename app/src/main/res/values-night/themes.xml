@@ -7,27 +7,28 @@
         <!-- Fix yellow autofill highlight -->
         <item name="android:autofilledHighlight" tools:targetApi="26">@android:color/transparent</item>
 
-        <!-- Custom Attributes for Dark Mode -->
-        <item name="mainBackground">#0B0B0E</item>
-        <item name="secondaryBackground">#1C1C1E</item>
+        <!-- Custom Attributes for Dark Mode - Significantly lightened for clarity -->
+        <item name="mainBackground">#1A1F2E</item>
+        <item name="secondaryBackground">#2A3347</item>
         <item name="textPrimary">#FFFFFF</item>
-        <item name="textSecondary">#BDBDBD</item>
-        <item name="cardStrokeColor">#1F1F1F</item>
+        <item name="textSecondary">#E2E8F0</item>
+        <item name="cardStrokeColor">#4A5568</item>
         <item name="rippleColor">#40FFFFFF</item>
-        <item name="skeletonColor">#1AFFFFFF</item>
+        <item name="skeletonColor">#33FFFFFF</item>
 
-        <!-- Component Specific for Dark Mode (Original Glass Style) -->
-        <item name="buttonGradientStart">#1E293B</item>
-        <item name="buttonGradientCenter">#111827</item>
-        <item name="buttonGradientEnd">#050505</item>
-        <item name="buttonStroke">#4FC3F7</item>
+        <!-- Component Specific for Dark Mode -->
+        <item name="buttonGradientStart">#3B4A6B</item>
+        <item name="buttonGradientCenter">#243354</item>
+        <item name="buttonGradientEnd">#1A2642</item>
+        <item name="buttonStroke">#00D2FF</item>
 
-        <!-- Subtle Glass Effect for Dark Mode -->
-        <item name="inputBgColor">#1AFFFFFF</item>
-        <item name="inputStrokeColor">#33FFFFFF</item>
+        <!-- High visibility for inputs -->
+        <item name="inputBgColor">#33FFFFFF</item>
+        <item name="inputStrokeColor">#66FFFFFF</item>
 
-        <item name="gradientStart">#020617</item>
-        <item name="gradientCenter">#0F172A</item>
-        <item name="gradientEnd">#000000</item>
+        <!-- Lighter Gradient Background -->
+        <item name="gradientStart">#2D3748</item>
+        <item name="gradientCenter">#1A202C</item>
+        <item name="gradientEnd">#10141D</item>
     </style>
 </resources>
