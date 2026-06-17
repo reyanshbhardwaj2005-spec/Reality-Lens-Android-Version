@@ -93,7 +93,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    saveToken(response.body().getAccessToken());
+                    saveToken(response.body().getAccessToken(), true);
                     fetchUserInfoAndRedirect();
                 } else {
                     handleError("Google Auth Failed: " + response.code());
@@ -114,7 +114,10 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String tempToken = response.body().getAccessToken();
-                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().putString("temp_token", tempToken).apply();
+                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit()
+                            .putString("temp_token", tempToken)
+                            .putBoolean("is_google_login", false)
+                            .apply();
                     
                     Intent intent = new Intent(WelcomeActivity.this, VerifyOtpActivity.class);
                     intent.putExtra("temp_token", tempToken);
@@ -139,7 +142,10 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String tempToken = response.body().getAccessToken();
-                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().putString("temp_token", tempToken).apply();
+                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit()
+                            .putString("temp_token", tempToken)
+                            .putBoolean("is_google_login", false)
+                            .apply();
                     
                     Intent intent = new Intent(WelcomeActivity.this, VerifyOtpActivity.class);
                     intent.putExtra("temp_token", tempToken);
@@ -186,9 +192,12 @@ public class WelcomeActivity extends AppCompatActivity {
         });
     }
 
-    private void saveToken(String token) {
+    private void saveToken(String token, boolean isGoogle) {
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-        prefs.edit().putString("access_token", token).apply();
+        prefs.edit()
+                .putString("access_token", token)
+                .putBoolean("is_google_login", isGoogle)
+                .apply();
     }
 
     private void handleError(String message) {
@@ -198,6 +207,7 @@ public class WelcomeActivity extends AppCompatActivity {
         getSharedPreferences("AppPrefs", MODE_PRIVATE).edit()
                 .remove("access_token")
                 .remove("temp_token")
+                .remove("is_google_login")
                 .apply();
         
         Intent intent = new Intent(this, LoginActivity.class);

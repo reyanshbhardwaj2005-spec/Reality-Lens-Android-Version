@@ -5,17 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    app:cardBackgroundColor="@android:color/transparent"
+    app:cardBackgroundColor="?attr/secondaryBackground"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
+    app:cardElevation="2dp"
     app:strokeColor="?attr/cardStrokeColor"
     app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:background="@drawable/secondary_btn_bg">
+        android:padding="12dp">
 
         <!-- Left: Image Thumbnail Container -->
         <com.google.android.material.card.MaterialCardView

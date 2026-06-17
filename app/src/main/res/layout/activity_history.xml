@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/deep_space">
+    android:background="?attr/mainBackground">
 
     <!-- Header Toolbar -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,14 +23,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:tint="@color/white" />
+            app:tint="?attr/textPrimary" />
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="History"
-            android:textColor="@color/white"
+            android:textColor="?attr/textPrimary"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/btn_back"
@@ -72,7 +72,7 @@
     <!-- Empty State -->
     <LinearLayout
         android:id="@+id/ll_empty_state"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
@@ -88,14 +88,14 @@
             android:layout_height="80dp"
             android:alpha="0.5"
             android:src="@drawable/ic_drawer_history"
-            app:tint="@color/white" />
+            app:tint="?attr/textSecondary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Your Reality Lens is clear! 🔍"
-            android:textColor="@color/white"
+            android:textColor="?attr/textPrimary"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -105,7 +105,7 @@
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="Start verifying content to see your analysis history here."
-            android:textColor="#B0BEC5"
+            android:textColor="?attr/textSecondary"
             android:textSize="14sp" />
     </LinearLayout>
 

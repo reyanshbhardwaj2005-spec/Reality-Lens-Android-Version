@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/deep_space"
+    android:background="?attr/mainBackground"
     android:fitsSystemWindows="true"
     tools:context=".DashboardActivity">
 
@@ -34,7 +34,7 @@
                 android:scaleType="centerInside"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
+                app:tint="?attr/textPrimary" />
 
             <TextView
                 android:id="@+id/tv_welcome_user"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:text="Hey kanha pandit,"
-                android:textColor="@color/white"
+                android:textColor="?attr/textPrimary"
                 android:textSize="18sp"
                 android:fontFamily="sans-serif-medium"
                 app:layout_constraintStart_toEndOf="@id/btn_hamburger_menu"
@@ -54,15 +54,15 @@
                 style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:backgroundTint="#1AFFFFFF"
+                android:backgroundTint="?attr/cardStrokeColor"
                 android:paddingHorizontal="12dp"
                 android:text="Minimise"
                 android:textAllCaps="false"
-                android:textColor="#B0BEC5"
+                android:textColor="?attr/textSecondary"
                 android:textSize="11sp"
                 app:iconSize="14dp"
                 app:iconPadding="6dp"
-                app:iconTint="#B0BEC5"
+                app:iconTint="?attr/textSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/btn_hamburger_menu"
                 app:layout_constraintBottom_toBottomOf="@id/btn_hamburger_menu"
@@ -78,7 +78,7 @@
                 android:layout_marginTop="64dp"
                 android:gravity="center"
                 android:text="What are we Investigating today?"
-                android:textColor="@color/white"
+                android:textColor="?attr/textPrimary"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -114,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Upload Files or Enter Text"
-                    android:textColor="@color/white"
+                    android:textColor="?attr/textPrimary"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +149,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="Text"
-                        android:textColor="#B0BEC5"
+                        android:textColor="?attr/textSecondary"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -167,7 +167,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Try examples:"
-                        android:textColor="#B0BEC5"
+                        android:textColor="?attr/textSecondary"
                         android:textSize="12sp" />
 
                     <HorizontalScrollView
@@ -187,9 +187,9 @@
                                 android:layout_height="32dp"
                                 android:layout_marginEnd="8dp"
                                 android:text="News article screenshot"
-                                android:textColor="@color/white"
+                                android:textColor="?attr/textPrimary"
                                 android:textSize="11sp"
-                                app:chipBackgroundColor="#1AFFFFFF"
+                                app:chipBackgroundColor="?attr/cardStrokeColor"
                                 app:chipCornerRadius="8dp"
                                 app:chipIcon="@drawable/ic_nav_history"
                                 app:chipIconSize="14dp"
@@ -201,9 +201,9 @@
                                 android:layout_height="32dp"
                                 android:layout_marginEnd="8dp"
                                 android:text="Political claim"
-                                android:textColor="@color/white"
+                                android:textColor="?attr/textPrimary"
                                 android:textSize="11sp"
-                                app:chipBackgroundColor="#1AFFFFFF"
+                                app:chipBackgroundColor="?attr/cardStrokeColor"
                                 app:chipCornerRadius="8dp"
                                 app:chipIcon="@drawable/baseline_info_24"
                                 app:chipIconSize="14dp"
@@ -214,9 +214,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="32dp"
                                 android:text="Viral social media post"
-                                android:textColor="@color/white"
+                                android:textColor="?attr/textPrimary"
                                 android:textSize="11sp"
-                                app:chipBackgroundColor="#1AFFFFFF"
+                                app:chipBackgroundColor="?attr/cardStrokeColor"
                                 app:chipCornerRadius="8dp"
                                 app:chipIcon="@drawable/ic_nav_about_us"
                                 app:chipIconSize="14dp"
@@ -259,7 +259,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:text="Choose a file or drag and drop it here"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/textPrimary"
                             android:textSize="14sp" />
 
                         <com.google.android.material.button.MaterialButton
@@ -268,10 +268,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
                             android:layout_marginTop="16dp"
-                            android:backgroundTint="#1AFFFFFF"
+                            android:backgroundTint="?attr/cardStrokeColor"
                             android:text="Browse File"
                             android:textAllCaps="false"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/textPrimary"
                             android:textSize="12sp"
                             app:cornerRadius="8dp"
                             android:insetTop="0dp"
@@ -289,8 +289,8 @@
                     android:gravity="top"
                     android:hint="Paste a link or type a claim to verify..."
                     android:padding="16dp"
-                    android:textColor="@color/white"
-                    android:textColorHint="#455A64"
+                    android:textColor="?attr/textPrimary"
+                    android:textColorHint="?attr/textSecondary"
                     android:visibility="gone"
                     android:textSize="14sp"
                     app:layout_constraintTop_toBottomOf="@id/ll_examples" />
@@ -319,10 +319,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_marginEnd="12dp"
-                        android:backgroundTint="#0DFFFFFF"
+                        android:backgroundTint="?attr/cardStrokeColor"
                         android:text="Reset"
                         android:textAllCaps="false"
-                        android:textColor="@color/white"
+                        android:textColor="?attr/textPrimary"
                         app:cornerRadius="8dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -349,7 +349,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
                 android:text="Recent Verifications"
-                android:textColor="@color/white"
+                android:textColor="?attr/textPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -391,14 +391,14 @@
                     android:layout_height="64dp"
                     android:alpha="0.5"
                     android:src="@drawable/ic_drawer_history"
-                    app:tint="@color/white" />
+                    app:tint="?attr/textSecondary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="No recent verifications yet! 🔎"
-                    android:textColor="@color/white"
+                    android:textColor="?attr/textPrimary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -408,7 +408,7 @@
                     android:layout_marginTop="4dp"
                     android:gravity="center"
                     android:text="Start your investigation above to uncover the truth."
-                    android:textColor="#B0BEC5"
+                    android:textColor="?attr/textSecondary"
                     android:textSize="13sp" />
             </LinearLayout>
 
@@ -421,10 +421,10 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/deep_space"
+        android:background="?attr/mainBackground"
         app:headerLayout="@layout/nav_header"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        app:itemIconTint="?attr/textPrimary"
+        app:itemTextColor="?attr/textPrimary"
         app:menu="@menu/drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

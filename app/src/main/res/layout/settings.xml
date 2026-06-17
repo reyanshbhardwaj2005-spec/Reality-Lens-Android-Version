@@ -212,6 +212,66 @@
             app:cardCornerRadius="18dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardElevation="0dp"
+            app:strokeColor="#1AFFFFFF"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/secondary_btn_bg">
+
+                <LinearLayout
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_nav_logout"
+                        app:tint="#B0BEC5" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Logout"
+                        android:textColor="?attr/textPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sign out of your account"
+                        android:textColor="?attr/textSecondary"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Delete Account Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_delete_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="18dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp"
             app:strokeColor="#8B0000"
             app:strokeWidth="1dp"
             android:layout_marginBottom="28dp"
@@ -247,7 +307,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Logout"
+                        android:text="Delete Account"
                         android:textColor="#FF5A5A"
                         android:textSize="20sp"
                         android:textStyle="bold"/>
@@ -255,9 +315,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sign out of your account"
+                        android:text="Permanently remove your account"
                         android:textColor="#FF5A5A"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        android:alpha="0.8"/>
                 </LinearLayout>
 
             </LinearLayout>

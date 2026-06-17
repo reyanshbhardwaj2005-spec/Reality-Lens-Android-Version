@@ -1,5 +1,6 @@
 package com.example.realiylens;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +16,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -27,6 +31,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.realiylens.network.LoginResponse;
 import com.example.realiylens.network.MainResponseModel;
 import com.example.realiylens.network.RetrofitClient;
 import com.example.realiylens.network.SubmitResponse;
@@ -47,7 +52,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -131,13 +138,8 @@ public class DashboardActivity extends AppCompatActivity {
 
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
-            
-            // Smoother navigation: 
-            // 1. Close the drawer first
             drawerLayout.closeDrawer(GravityCompat.START);
             
-            // 2. Wait for the drawer to finish its animation before launching the next screen
-            // This prevents jank/stutter during the transition
             drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
                 @Override
                 public void onDrawerClosed(View drawerView) {
@@ -152,15 +154,194 @@ public class DashboardActivity extends AppCompatActivity {
                         startActivity(new Intent(DashboardActivity.this, SettingsActivity.class));
                     } else if (id == R.id.nav_about_us) {
                         startActivity(new Intent(DashboardActivity.this, AboutUsActivity.class));
+                    } else if (id == R.id.nav_profile) {
+                        showEditProfileDialog();
                     }
                 }
             });
-            
             return true;
         });
 
         registerAnalysisReceiver();
         fetchUserInfo();
+    }
+
+    private void showEditProfileDialog() {
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        boolean isGoogleLogin = prefs.getBoolean("is_google_login", false);
+
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_edit_profile);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvModeUsername = dialog.findViewById(R.id.tv_mode_username);
+        TextView tvModePassword = dialog.findViewById(R.id.tv_mode_password);
+        LinearLayout llUsernameSection = dialog.findViewById(R.id.ll_username_section);
+        LinearLayout llPasswordSection = dialog.findViewById(R.id.ll_password_section);
+        EditText etNewUsername = dialog.findViewById(R.id.et_new_username);
+        EditText etNewPassword = dialog.findViewById(R.id.et_new_password);
+        EditText etOtpInput = dialog.findViewById(R.id.et_otp_input);
+        MaterialButton btnSendOtp = dialog.findViewById(R.id.btn_send_otp);
+        MaterialButton btnSave = dialog.findViewById(R.id.btn_save_changes);
+        MaterialButton btnCancel = dialog.findViewById(R.id.btn_cancel);
+        ImageButton btnClose = dialog.findViewById(R.id.btn_close_dialog);
+
+        final boolean[] isPasswordMode = {false};
+
+        if (isGoogleLogin) {
+            tvModePassword.setVisibility(View.GONE);
+            // Ensure username is visible if it was somehow hidden
+            tvModeUsername.setBackgroundResource(R.drawable.btn_gradient_simple);
+            tvModeUsername.setTextColor(Color.WHITE);
+        }
+
+        // Initialize with current username
+        if (tvUserUsername != null) {
+            etNewUsername.setText(tvUserUsername.getText().toString());
+        }
+
+        tvModeUsername.setOnClickListener(v -> {
+            isPasswordMode[0] = false;
+            tvModeUsername.setBackgroundResource(R.drawable.btn_gradient_simple);
+            tvModeUsername.setTextColor(Color.WHITE);
+            tvModePassword.setBackground(null);
+            tvModePassword.setTextColor(Color.parseColor("#B0BEC5"));
+            llUsernameSection.setVisibility(View.VISIBLE);
+            llPasswordSection.setVisibility(View.GONE);
+        });
+
+        tvModePassword.setOnClickListener(v -> {
+            if (isGoogleLogin) return;
+            isPasswordMode[0] = true;
+            tvModePassword.setBackgroundResource(R.drawable.btn_gradient_simple);
+            tvModePassword.setTextColor(Color.WHITE);
+            tvModeUsername.setBackground(null);
+            tvModeUsername.setTextColor(Color.parseColor("#B0BEC5"));
+            llPasswordSection.setVisibility(View.VISIBLE);
+            llUsernameSection.setVisibility(View.GONE);
+        });
+
+        btnSendOtp.setOnClickListener(v -> {
+            String password = etNewPassword.getText().toString().trim();
+            if (password.isEmpty()) {
+                Toast.makeText(this, "Enter new password first", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            sendPasswordChangeRequest(password, btnSendOtp);
+        });
+
+        btnSave.setOnClickListener(v -> {
+            if (isPasswordMode[0]) {
+                String password = etNewPassword.getText().toString().trim();
+                String otp = etOtpInput.getText().toString().trim();
+                String tempToken = prefs.getString("temp_password_token", "");
+
+                if (password.isEmpty() || otp.isEmpty() || tempToken.isEmpty()) {
+                    Toast.makeText(this, "Please enter password, send OTP and enter it", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                verifyPasswordUpdate(tempToken, otp, dialog);
+            } else {
+                String username = etNewUsername.getText().toString().trim();
+                if (username.isEmpty()) {
+                    Toast.makeText(this, "Please enter new username", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                updateProfile("username", username, dialog);
+            }
+        });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+    private void sendPasswordChangeRequest(String password, View btn) {
+        String token = getSharedPreferences("AppPrefs", MODE_PRIVATE).getString("access_token", "");
+        Map<String, String> body = new HashMap<>();
+        body.put("password", password);
+
+        btn.setEnabled(false);
+        RetrofitClient.getApiService().changePassword("Bearer " + token, body).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                btn.setEnabled(true);
+                if (response.isSuccessful() && response.body() != null) {
+                    String tempToken = response.body().getAccessToken();
+                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().putString("temp_password_token", tempToken).apply();
+                    Toast.makeText(DashboardActivity.this, "OTP sent to your email", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(DashboardActivity.this, "Requesting too much OTP's. Try again after 1 min.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                btn.setEnabled(true);
+                Toast.makeText(DashboardActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void verifyPasswordUpdate(String tempToken, String otp, Dialog dialog) {
+        String token = getSharedPreferences("AppPrefs", MODE_PRIVATE).getString("access_token", "");
+        Map<String, String> body = new HashMap<>();
+        body.put("token", tempToken);
+        body.put("otp", otp);
+
+        RetrofitClient.getApiService().verifyUpdate("Bearer " + token, body).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(DashboardActivity.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
+                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().remove("temp_password_token").apply();
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(DashboardActivity.this, "OTP verification failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Toast.makeText(DashboardActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateProfile(String field, String value, Dialog dialog) {
+        String token = getSharedPreferences("AppPrefs", MODE_PRIVATE).getString("access_token", "");
+        Map<String, String> updates = new HashMap<>();
+        updates.put(field, value);
+
+        String authHeader = "Bearer " + token;
+        Call<UserResponse> call;
+
+        if ("username".equals(field)) {
+            call = RetrofitClient.getApiService().changeUserDetails(authHeader, updates);
+        } else {
+            call = RetrofitClient.getApiService().updateProfile(authHeader, updates);
+        }
+
+        call.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(DashboardActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+                    fetchUserInfo();
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(DashboardActivity.this, "Update failed: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Toast.makeText(DashboardActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void registerAnalysisReceiver() {

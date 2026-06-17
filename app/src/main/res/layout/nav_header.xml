@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="176dp"
     android:background="@drawable/drawr"
@@ -8,13 +9,25 @@
     android:padding="24dp"
     android:theme="@style/Theme.RealiyLens">
 
-    <ImageView
-        android:id="@+id/iv_user_avatar"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_user_avatar"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@drawable/ic_drawer_profile"
-        android:contentDescription="User Avatar"
-        android:alpha="0.9" />
+        app:cardBackgroundColor="@color/accent_cyan"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
+
+        <TextView
+            android:id="@+id/tv_avatar_letter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="U"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/tv_user_username"
