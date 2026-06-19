@@ -15,6 +15,10 @@ import com.example.realiylens.network.LoginResponse;
 import com.example.realiylens.network.RegisterRequest;
 import com.example.realiylens.network.RetrofitClient;
 import com.example.realiylens.network.UserResponse;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.IOException;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -96,7 +100,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     saveToken(response.body().getAccessToken(), true);
                     fetchUserInfoAndRedirect();
                 } else {
-                    handleError("Google Auth Failed: " + response.code());
+                    handleError(getErrorMessage(response, "Google Auth Failed"));
                 }
             }
 
@@ -124,7 +128,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    handleError("Login failed: " + response.code());
+                    handleError(getErrorMessage(response, "Login failed"));
                 }
             }
 
@@ -152,7 +156,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    handleError("Registration failed: " + response.code());
+                    handleError(getErrorMessage(response, "Registration failed"));
                 }
             }
 
@@ -181,7 +185,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    handleError("Session expired: " + response.code());
+                    handleError(getErrorMessage(response, "Session expired"));
                 }
             }
 
@@ -190,6 +194,22 @@ public class WelcomeActivity extends AppCompatActivity {
                 handleError("Profile fetch failed: " + t.getMessage());
             }
         });
+    }
+
+    private String getErrorMessage(Response<?> response, String defaultMessage) {
+        try {
+            ResponseBody errorBody = response.errorBody();
+            if (errorBody != null) {
+                String errorString = errorBody.string();
+                JsonObject jsonObject = JsonParser.parseString(errorString).getAsJsonObject();
+                if (jsonObject.has("detail")) {
+                    return jsonObject.get("detail").getAsString();
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error parsing error body", e);
+        }
+        return defaultMessage + ": " + response.code();
     }
 
     private void saveToken(String token, boolean isGoogle) {

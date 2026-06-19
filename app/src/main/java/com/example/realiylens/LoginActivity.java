@@ -1,6 +1,5 @@
 package com.example.realiylens;
 
-import android.app.Activity;
 import android.app.StatusBarManager;
 import android.content.ComponentName;
 import android.content.Context;

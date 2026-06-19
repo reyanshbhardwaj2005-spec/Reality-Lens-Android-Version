@@ -71,7 +71,7 @@ public class DashboardActivity extends AppCompatActivity {
     private RecyclerView rvVerifications;
     private HistoryAdapter historyAdapter;
     private LinearLayout llSkeletonContainer, llEmptyState;
-    private TextView tvUserUsername, tvUserEmail, tvWelcomeUser;
+    private TextView tvUserUsername, tvUserEmail, tvWelcomeUser, tvAvatarLetter;
     private TextView tvToggleFile, tvToggleText;
     private View clUploadArea;
     private EditText etTextInput;
@@ -114,6 +114,7 @@ public class DashboardActivity extends AppCompatActivity {
         View headerView = navigationView.getHeaderView(0);
         tvUserUsername = headerView.findViewById(R.id.tv_user_username);
         tvUserEmail = headerView.findViewById(R.id.tv_user_email);
+        tvAvatarLetter = headerView.findViewById(R.id.tv_avatar_letter);
 
         rvVerifications.setLayoutManager(new LinearLayoutManager(this));
         historyAdapter = new HistoryAdapter(this);
@@ -472,6 +473,9 @@ public class DashboardActivity extends AppCompatActivity {
                     tvWelcomeUser.setText("Hey " + username + ",");
                     tvUserUsername.setText(username);
                     tvUserEmail.setText(response.body().getEmail());
+                    if (username != null && !username.isEmpty()) {
+                        tvAvatarLetter.setText(String.valueOf(username.charAt(0)).toUpperCase());
+                    }
                 }
             }
             @Override
