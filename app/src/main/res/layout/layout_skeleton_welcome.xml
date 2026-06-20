@@ -1,75 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<com.facebook.shimmer.ShimmerFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    android:background="@drawable/drawr">
+    app:shimmer_auto_start="true"
+    app:shimmer_duration="1200">
 
-    <!-- Success Check Placeholder -->
-    <View
-        android:id="@+id/view_check_placeholder"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/skeleton_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Title Placeholder -->
-    <View
-        android:id="@+id/view_title_placeholder"
-        android:layout_width="250dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/skeleton_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_check_placeholder" />
-
-    <!-- Subtitle Placeholder -->
-    <View
-        android:id="@+id/view_subtitle_placeholder"
-        android:layout_width="200dp"
-        android:layout_height="16dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/skeleton_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_title_placeholder" />
-
-    <!-- Instruction Panel Placeholder -->
-    <View
-        android:id="@+id/view_panel_placeholder"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/skeleton_bg"
-        app:layout_constraintTop_toBottomOf="@id/view_subtitle_placeholder" />
+        android:layout_height="match_parent">
 
-    <!-- Buttons Placeholder -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/view_panel_placeholder">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/skeleton_bg" />
+            <!-- Top Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1.2"
-            android:background="@drawable/skeleton_bg" />
-    </LinearLayout>
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_skeleton_round"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:layout_width="120dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/bg_skeleton_round"/>
+
+            </LinearLayout>
+
+            <!-- Title -->
+            <View
+                android:layout_width="250dp"
+                android:layout_height="26dp"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/bg_skeleton_round"/>
+
+            <!-- Subtitle -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="14dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_skeleton_round"/>
+
+            <View
+                android:layout_width="80dp"
+                android:layout_height="14dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_skeleton_round"/>
+
+            <!-- OR -->
+            <View
+                android:layout_width="40dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/bg_skeleton_round"/>
+
+            <!-- Upload Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_skeleton_card"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Upload Title -->
+                <View
+                    android:layout_width="180dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/bg_skeleton_round"/>
+
+                <!-- Toggle -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="55dp"
+                        android:layout_height="28dp"
+                        android:background="@drawable/bg_skeleton_round"/>
+
+                    <View
+                        android:layout_width="55dp"
+                        android:layout_height="28dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_skeleton_round"/>
+                </LinearLayout>
+
+                <!-- Description -->
+                <View
+                    android:layout_width="220dp"
+                    android:layout_height="12dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/bg_skeleton_round"/>
+
+                <!-- Image Area -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_skeleton_border"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:background="@drawable/bg_skeleton_circle"/>
+
+                    <View
+                        android:layout_width="160dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_skeleton_round"/>
+
+                    <View
+                        android:layout_width="130dp"
+                        android:layout_height="36dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_skeleton_round"/>
+                </LinearLayout>
+
+                <!-- Buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="70dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_skeleton_round"/>
+
+                    <View
+                        android:layout_width="100dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="12dp"
+                        android:background="@drawable/bg_skeleton_round"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</com.facebook.shimmer.ShimmerFrameLayout>

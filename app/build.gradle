@@ -49,6 +49,7 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+    implementation "com.facebook.shimmer:shimmer:0.5.0"
     
     // Networking
     implementation libs.retrofit
