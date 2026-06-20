@@ -11,7 +11,7 @@
 
         <item name="android:autofilledHighlight" tools:targetApi="26">@android:color/transparent</item>
 
-        <!-- Modern Dark Theme Palette -->
+        <!-- Modern Dark Theme Palette - Shifted to Black Shades -->
         <item name="mainBackground">@color/deep_space</item>
         <item name="secondaryBackground">@color/nebula_dark</item>
         <item name="textPrimary">@color/white</item>
@@ -20,12 +20,12 @@
         <item name="rippleColor">@color/glass_white</item>
         <item name="skeletonColor">@color/glass_white</item>
 
-        <!-- Gradient Background Attributes -->
-        <item name="gradientStart">#0F172A</item>
-        <item name="gradientCenter">#020617</item>
+        <!-- Gradient Background Attributes - Darkened to Black shades -->
+        <item name="gradientStart">#0D0D0D</item>
+        <item name="gradientCenter">#050505</item>
         <item name="gradientEnd">#000000</item>
 
-        <!-- Cyberpunk Glass Effect Components -->
+        <!-- Cyberpunk Glass Effect Components - Restored Original Colors -->
         <item name="buttonGradientStart">@color/accent_cyan</item>
         <item name="buttonGradientCenter">#00B8D4</item>
         <item name="buttonGradientEnd">@color/accent_purple</item>

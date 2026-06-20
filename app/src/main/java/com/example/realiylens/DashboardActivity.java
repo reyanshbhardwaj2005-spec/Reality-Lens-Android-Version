@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +75,8 @@ public class DashboardActivity extends AppCompatActivity {
     private TextView tvUserUsername, tvUserEmail, tvWelcomeUser, tvAvatarLetter;
     private TextView tvToggleFile, tvToggleText;
     private View clUploadArea;
+    private LinearLayout llUploadPlaceholder, llSelectedPreviewContainer;
+    private ImageView ivSelectedPreview;
     private EditText etTextInput;
     private MaterialButton btnSendVerification, btnBrowse;
     private boolean isTextMode = false;
@@ -104,6 +107,9 @@ public class DashboardActivity extends AppCompatActivity {
         tvToggleFile = findViewById(R.id.tv_toggle_file);
         tvToggleText = findViewById(R.id.tv_toggle_text);
         clUploadArea = findViewById(R.id.cl_upload_area);
+        llUploadPlaceholder = findViewById(R.id.ll_upload_placeholder);
+        llSelectedPreviewContainer = findViewById(R.id.ll_selected_preview_container);
+        ivSelectedPreview = findViewById(R.id.iv_selected_preview);
         etTextInput = findViewById(R.id.et_text_input);
         btnSendVerification = findViewById(R.id.btn_send_verification);
         btnBrowse = findViewById(R.id.btn_browse);
@@ -123,7 +129,7 @@ public class DashboardActivity extends AppCompatActivity {
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
             if (uri != null) {
                 selectedImageUri = uri;
-                Toast.makeText(this, "Image selected", Toast.LENGTH_SHORT).show();
+                showImagePreview(uri);
             }
         });
 
@@ -136,6 +142,10 @@ public class DashboardActivity extends AppCompatActivity {
 
         btnSendVerification.setOnClickListener(v -> handleVerification());
         findViewById(R.id.btn_reset).setOnClickListener(v -> resetInputs());
+        
+        if (llSelectedPreviewContainer != null) {
+            llSelectedPreviewContainer.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
+        }
 
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -167,6 +177,14 @@ public class DashboardActivity extends AppCompatActivity {
         fetchUserInfo();
     }
 
+    private void showImagePreview(Uri uri) {
+        if (ivSelectedPreview != null && llUploadPlaceholder != null && llSelectedPreviewContainer != null) {
+            ivSelectedPreview.setImageURI(uri);
+            llSelectedPreviewContainer.setVisibility(View.VISIBLE);
+            llUploadPlaceholder.setVisibility(View.GONE);
+        }
+    }
+
     private void showEditProfileDialog() {
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         boolean isGoogleLogin = prefs.getBoolean("is_google_login", false);
@@ -193,12 +211,10 @@ public class DashboardActivity extends AppCompatActivity {
 
         if (isGoogleLogin) {
             tvModePassword.setVisibility(View.GONE);
-            // Ensure username is visible if it was somehow hidden
             tvModeUsername.setBackgroundResource(R.drawable.btn_gradient_simple);
             tvModeUsername.setTextColor(Color.WHITE);
         }
 
-        // Initialize with current username
         if (tvUserUsername != null) {
             etNewUsername.setText(tvUserUsername.getText().toString());
         }
@@ -368,6 +384,10 @@ public class DashboardActivity extends AppCompatActivity {
     private void resetInputs() {
         etTextInput.setText("");
         selectedImageUri = null;
+        if (llSelectedPreviewContainer != null && llUploadPlaceholder != null) {
+            llSelectedPreviewContainer.setVisibility(View.GONE);
+            llUploadPlaceholder.setVisibility(View.VISIBLE);
+        }
         Toast.makeText(this, "Reset successful", Toast.LENGTH_SHORT).show();
     }
 
@@ -390,6 +410,8 @@ public class DashboardActivity extends AppCompatActivity {
                     btnSendVerification.setText("Send Verification");
                     if (response.isSuccessful() && response.body() != null) {
                         selectedImageUri = null;
+                        if (llSelectedPreviewContainer != null) llSelectedPreviewContainer.setVisibility(View.GONE);
+                        if (llUploadPlaceholder != null) llUploadPlaceholder.setVisibility(View.VISIBLE);
                         Intent intent = new Intent(DashboardActivity.this, VerificationResultActivity.class);
                         intent.putExtra("job_id", response.body().getJobId());
                         startActivity(intent);
@@ -534,7 +556,6 @@ public class DashboardActivity extends AppCompatActivity {
         try {
             if (element.isJsonArray()) {
                 JsonArray arr = element.getAsJsonArray();
-                // Check for nested array: [[{...}]]
                 if (arr.size() > 0 && arr.get(0).isJsonArray()) {
                     return extractHistoryList(arr.get(0));
                 }

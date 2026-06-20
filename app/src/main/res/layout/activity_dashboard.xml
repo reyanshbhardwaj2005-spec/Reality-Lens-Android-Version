@@ -26,11 +26,11 @@
             <!-- Top Header -->
             <ImageButton
                 android:id="@+id/btn_hamburger_menu"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/hamburger_menu"
                 android:src="@drawable/hamburger_button"
-                android:padding="8dp"
+                android:padding="12dp"
                 android:scaleType="centerInside"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:text="Hey kanha pandit,"
+                android:text="Hey Shivanshu,"
                 android:textColor="?attr/textPrimary"
                 android:textSize="18sp"
                 android:fontFamily="sans-serif-medium"
@@ -51,191 +51,152 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_minimize_tray"
-                style="@style/Widget.Material3.Button.TonalButton"
+                style="@style/Widget.Material3.Button.IconButton"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:backgroundTint="?attr/cardStrokeColor"
-                android:paddingHorizontal="12dp"
-                android:text="Minimise"
-                android:textAllCaps="false"
-                android:textColor="?attr/textSecondary"
-                android:textSize="11sp"
-                app:iconSize="14dp"
-                app:iconPadding="6dp"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/minimize"
+                app:iconSize="20dp"
                 app:iconTint="?attr/textSecondary"
+                app:iconPadding="0dp"
+                app:strokeWidth="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/btn_hamburger_menu"
                 app:layout_constraintBottom_toBottomOf="@id/btn_hamburger_menu"
-                app:cornerRadius="8dp"
+                app:cornerRadius="12dp"
                 android:insetTop="0dp"
-                android:insetBottom="0dp" />
+                android:insetBottom="0dp"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:padding="0dp" />
+
+            <View
+                android:id="@+id/header_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/text_secondary"
+                android:alpha="0.3"
+                app:layout_constraintTop_toBottomOf="@id/btn_hamburger_menu" />
 
             <!-- Hero Section -->
             <TextView
                 android:id="@+id/tv_hero_title"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="64dp"
+                android:layout_marginTop="40dp"
                 android:gravity="center"
                 android:text="What are we Investigating today?"
                 android:textColor="?attr/textPrimary"
-                android:textSize="32sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_hamburger_menu" />
+                app:layout_constraintTop_toBottomOf="@id/header_divider" />
 
             <TextView
                 android:id="@+id/tv_hero_subtitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="Drop a screenshot, an image or claim below and we'll do the fact-checking for you."
-                android:textColor="@color/accent_cyan"
+                android:text="Use Snip Area Tool from the quick access panel and\nSelect the Area on your screen."
+                android:textColor="?attr/textSecondary"
                 android:textSize="14sp"
-                android:alpha="0.9"
+                android:lineSpacingExtra="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_hero_title" />
+
+            <TextView
+                android:id="@+id/tv_or_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="OR"
+                android:textColor="?attr/textPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_hero_subtitle" />
 
             <!-- Main Panel -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_main_panel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/bg_dashboard_panel"
-                android:padding="24dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_hero_subtitle">
+                android:padding="20dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_or_label">
 
                 <TextView
                     android:id="@+id/tv_panel_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Upload Files or Enter Text"
+                    android:text="Upload files or Enter text"
                     android:textColor="?attr/textPrimary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toStartOf="@id/ll_toggle_container"
+                    app:layout_constraintTop_toTopOf="@id/ll_toggle_container"
+                    app:layout_constraintBottom_toBottomOf="@id/ll_toggle_container"/>
 
-                <!-- File/Text Toggle - Positioned below Title -->
+                <!-- File/Text Toggle -->
                 <LinearLayout
                     android:id="@+id/ll_toggle_container"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_height="32dp"
                     android:background="@drawable/bg_toggle_group"
                     android:orientation="horizontal"
                     android:padding="3dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_panel_title">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:id="@+id/tv_toggle_file"
-                        android:layout_width="70dp"
+                        android:layout_width="45dp"
                         android:layout_height="match_parent"
                         android:background="@drawable/btn_gradient_simple"
                         android:gravity="center"
                         android:text="File"
                         android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textSize="11sp"
+                        android:fontFamily="sans-serif-medium" />
 
                     <TextView
                         android:id="@+id/tv_toggle_text"
-                        android:layout_width="70dp"
+                        android:layout_width="45dp"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="Text"
                         android:textColor="?attr/textSecondary"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
-                <!-- Try Examples Row -->
-                <LinearLayout
-                    android:id="@+id/ll_examples"
+                <!-- Try Examples Section -->
+                <TextView
+                    android:id="@+id/tv_examples_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    app:layout_constraintTop_toBottomOf="@id/ll_toggle_container">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Try examples:"
-                        android:textColor="?attr/textSecondary"
-                        android:textSize="12sp" />
-
-                    <HorizontalScrollView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
-                        android:scrollbars="none">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.chip.Chip
-                                android:layout_width="wrap_content"
-                                android:layout_height="32dp"
-                                android:layout_marginEnd="8dp"
-                                android:text="News article screenshot"
-                                android:textColor="?attr/textPrimary"
-                                android:textSize="11sp"
-                                app:chipBackgroundColor="?attr/cardStrokeColor"
-                                app:chipCornerRadius="8dp"
-                                app:chipIcon="@drawable/ic_nav_history"
-                                app:chipIconSize="14dp"
-                                app:chipIconTint="@color/accent_cyan"
-                                app:chipStrokeWidth="0dp" />
-
-                            <com.google.android.material.chip.Chip
-                                android:layout_width="wrap_content"
-                                android:layout_height="32dp"
-                                android:layout_marginEnd="8dp"
-                                android:text="Political claim"
-                                android:textColor="?attr/textPrimary"
-                                android:textSize="11sp"
-                                app:chipBackgroundColor="?attr/cardStrokeColor"
-                                app:chipCornerRadius="8dp"
-                                app:chipIcon="@drawable/baseline_info_24"
-                                app:chipIconSize="14dp"
-                                app:chipIconTint="@color/accent_cyan"
-                                app:chipStrokeWidth="0dp" />
-
-                            <com.google.android.material.chip.Chip
-                                android:layout_width="wrap_content"
-                                android:layout_height="32dp"
-                                android:text="Viral social media post"
-                                android:textColor="?attr/textPrimary"
-                                android:textSize="11sp"
-                                app:chipBackgroundColor="?attr/cardStrokeColor"
-                                app:chipCornerRadius="8dp"
-                                app:chipIcon="@drawable/ic_nav_about_us"
-                                app:chipIconSize="14dp"
-                                app:chipIconTint="@color/accent_purple"
-                                app:chipStrokeWidth="0dp" />
-                        </LinearLayout>
-                    </HorizontalScrollView>
-                </LinearLayout>
+                    android:layout_marginTop="16dp"
+                    android:text="Try Examples: News articles, Political claim, Social media posts"
+                    android:textColor="?attr/textSecondary"
+                    android:textSize="11sp"
+                    app:layout_constraintTop_toBottomOf="@id/ll_toggle_container" />
 
                 <!-- Upload Content Area -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_upload_area"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="240dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/bg_dashed_upload"
-                    app:layout_constraintTop_toBottomOf="@id/ll_examples">
+                    app:layout_constraintTop_toBottomOf="@id/tv_examples_label">
 
                     <LinearLayout
+                        android:id="@+id/ll_upload_placeholder"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -247,43 +208,80 @@
 
                         <ImageView
                             android:id="@+id/iv_upload_icon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/bg_toggle_group"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_nav_dashboard"
-                            app:tint="@color/accent_cyan" />
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:background="@drawable/bg_upload_icon_circle"
+                            android:padding="20dp"
+                            android:src="@drawable/baseline_image_search_24"
+                            app:tint="?attr/textPrimary"
+                            android:alpha="0.3"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:text="Choose an image from gallery"
+                            android:textColor="?attr/textSecondary"
+                            android:textSize="15sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_browse"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Browse Image"
+                            android:textAllCaps="false"
+                            android:textColor="?attr/textPrimary"
+                            android:textSize="14sp"
+                            android:paddingHorizontal="24dp"
+                            app:strokeColor="?attr/cardStrokeColor"
+                            app:cornerRadius="8dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_selected_preview_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="140dp"
+                            android:layout_height="140dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="?attr/cardStrokeColor">
+
+                            <ImageView
+                                android:id="@+id/iv_selected_preview"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop" />
+                        </com.google.android.material.card.MaterialCardView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Choose an image or drag and drop it here"
-                            android:textColor="?attr/textPrimary"
-                            android:textSize="14sp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_browse"
-                            style="@style/Widget.Material3.Button.TonalButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="36dp"
-                            android:layout_marginTop="16dp"
-                            android:backgroundTint="?attr/cardStrokeColor"
-                            android:text="Browse image"
-                            android:textAllCaps="false"
-                            android:textColor="?attr/textPrimary"
-                            android:textSize="12sp"
-                            app:cornerRadius="8dp"
-                            android:insetTop="0dp"
-                            android:insetBottom="0dp" />
+                            android:text="Tap to change image"
+                            android:textColor="?attr/textSecondary"
+                            android:textSize="12sp" />
                     </LinearLayout>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <!-- Text Input Area (Hidden) -->
                 <EditText
                     android:id="@+id/et_text_input"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="240dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/bg_dashboard_panel"
                     android:gravity="top"
@@ -293,9 +291,9 @@
                     android:textColorHint="?attr/textSecondary"
                     android:visibility="gone"
                     android:textSize="14sp"
-                    app:layout_constraintTop_toBottomOf="@id/ll_examples" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_examples_label" />
 
-                <!-- Responsive Barrier to keep buttons below the active box -->
+                <!-- Responsive Barrier -->
                 <androidx.constraintlayout.widget.Barrier
                     android:id="@+id/barrier_input_boxes"
                     android:layout_width="wrap_content"
@@ -307,7 +305,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="20dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -315,15 +313,18 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_reset"
-                        style="@style/Widget.Material3.Button.TextButton"
+                        style="@style/Widget.Material3.Button.TonalButton"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_marginEnd="12dp"
-                        android:backgroundTint="?attr/cardStrokeColor"
                         android:text="Reset"
                         android:textAllCaps="false"
                         android:textColor="?attr/textPrimary"
-                        app:cornerRadius="8dp" />
+                        android:textSize="13sp"
+                        app:cornerRadius="8dp"
+                        app:backgroundTint="?attr/secondaryBackground"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="?attr/cardStrokeColor" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_send_verification"
@@ -331,8 +332,8 @@
                         android:layout_height="40dp"
                         android:background="@drawable/btn_gradient_simple"
                         app:backgroundTint="@null"
-                        android:paddingHorizontal="20dp"
-                        android:text="Send Verification"
+                        android:paddingHorizontal="24dp"
+                        android:text="Verify Now"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textStyle="bold"
@@ -342,12 +343,12 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Recent History Section -->
+            <!-- Recent History Section (Do not change) -->
             <TextView
                 android:id="@+id/tv_recent_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="24dp"
                 android:text="Recent Verifications"
                 android:textColor="?attr/textPrimary"
                 android:textSize="18sp"
@@ -359,7 +360,7 @@
                 android:id="@+id/rv_verifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:nestedScrollingEnabled="false"
                 app:layout_constraintTop_toBottomOf="@id/tv_recent_label"
                 tools:listitem="@layout/item_recent_verification" />
@@ -368,7 +369,7 @@
                 android:id="@+id/ll_skeleton_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical"
                 app:layout_constraintTop_toBottomOf="@id/tv_recent_label">
                 <include layout="@layout/layout_skeleton_item" />
@@ -379,7 +380,7 @@
                 android:id="@+id/ll_empty_state"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="16dp"

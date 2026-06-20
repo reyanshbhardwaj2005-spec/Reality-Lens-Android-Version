@@ -64,7 +64,8 @@
             android:textColor="?attr/textPrimary"
             android:textStyle="bold"
             android:textSize="22sp"
-            android:layout_marginBottom="14dp"/>
+            android:layout_marginBottom="14dp"
+            android:visibility="gone"/>
 
         <!-- Dark Mode Card -->
         <androidx.cardview.widget.CardView
@@ -75,7 +76,8 @@
             app:cardElevation="0dp"
             app:strokeColor="?attr/cardStrokeColor"
             app:strokeWidth="1dp"
-            android:layout_marginBottom="28dp">
+            android:layout_marginBottom="28dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"

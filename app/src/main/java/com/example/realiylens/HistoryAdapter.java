@@ -119,10 +119,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 Glide.with(context)
                         .asBitmap()
                         .load(decodedString)
-                        .placeholder(android.R.drawable.ic_menu_gallery)
+                        .placeholder(R.drawable.image)
                         .into(holder.ivThumbnail);
             } catch (Exception e) {
-                holder.ivThumbnail.setImageResource(android.R.drawable.ic_menu_report_image);
+                holder.ivThumbnail.setImageResource(R.drawable.image);
             }
         } else {
             String fullImageUrl = RetrofitClient.getFullImageUrl(imageUrlStr);
@@ -138,11 +138,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
                 Glide.with(context)
                         .load(loadTarget)
-                        .placeholder(android.R.drawable.ic_menu_gallery)
-                        .error(android.R.drawable.ic_menu_report_image)
+                        .placeholder(R.drawable.image)
+                        .error(R.drawable.image)
                         .into(holder.ivThumbnail);
             } else {
-                holder.ivThumbnail.setImageResource(android.R.drawable.ic_menu_gallery);
+                holder.ivThumbnail.setImageResource(R.drawable.image);
             }
         }
 

@@ -15,7 +15,6 @@ public class AboutUsActivity extends AppCompatActivity {
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
         }
-
         // this is a change
     }
 }
