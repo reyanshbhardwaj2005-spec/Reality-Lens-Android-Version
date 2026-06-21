@@ -219,20 +219,25 @@
                 android:background="?attr/cardStrokeColor" />
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_google_signup"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginTop="32dp"
-            android:background="@drawable/secondary_btn_bg"
-            android:text="SignUp with Google"
+            android:text="Sign Up with Google"
+            android:textColor="@color/white"
             android:textAllCaps="false"
-            android:textColor="?attr/textPrimary"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/secondary_btn_bg"
+            app:icon="@drawable/google"
+            app:iconGravity="textStart"
+            app:iconSize="18dp"
+            app:iconPadding="8dp"
+            app:iconTint="@null"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/or_layout" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/or_layout" />>
 
         <LinearLayout
             android:layout_width="wrap_content"

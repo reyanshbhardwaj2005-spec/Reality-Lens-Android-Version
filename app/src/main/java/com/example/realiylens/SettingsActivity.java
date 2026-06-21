@@ -14,12 +14,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import com.example.realiylens.network.LoginResponse;
 import com.example.realiylens.network.RetrofitClient;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.HashMap;
 import java.util.Map;
 import retrofit2.Call;
@@ -48,7 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> finish());
 
-        btnLogout.setOnClickListener(v -> logout());
+        btnLogout.setOnClickListener(v -> showLogoutConfirmationDialog());
 
         btnDeleteAccount.setOnClickListener(v -> initiateAccountDeletion());
 
@@ -63,6 +65,15 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    private void showLogoutConfirmationDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Yes", (dialog, which) -> logout())
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
     private void initiateAccountDeletion() {
         String token = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).getString("access_token", "");
         String authHeader = "Bearer " + token;
@@ -74,6 +85,9 @@ public class SettingsActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     // 2. Server sends a temporary access_token
                     String tempDeleteToken = response.body().getAccessToken();
+                    getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
+                            .putLong("otp_timestamp", System.currentTimeMillis())
+                            .apply();
                     showDeleteAccountDialog(tempDeleteToken);
                 } else {
                     Toast.makeText(SettingsActivity.this, "Failed to initiate deletion. Try again.", Toast.LENGTH_SHORT).show();
@@ -105,6 +119,14 @@ public class SettingsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please enter the OTP", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            long otpTimestamp = prefs.getLong("otp_timestamp", 0);
+            if (System.currentTimeMillis() - otpTimestamp > 120000) { // 2 minutes
+                Toast.makeText(this, "Session Expired. Send the OTP again.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             // 3. Verify deletion with temp token and OTP
             verifyDeletion(tempDeleteToken, otp, dialog);
         });
@@ -130,6 +152,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     dialog.dismiss();
                     Toast.makeText(SettingsActivity.this, "Account deleted successfully", Toast.LENGTH_LONG).show();
+                    getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit().remove("otp_timestamp").apply();
                     logout(); // Clear session and exit
                 } else {
                     Toast.makeText(SettingsActivity.this, "Invalid OTP", Toast.LENGTH_SHORT).show();

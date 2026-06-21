@@ -120,11 +120,15 @@ public class WelcomeActivity extends AppCompatActivity {
                     String tempToken = response.body().getAccessToken();
                     getSharedPreferences("AppPrefs", MODE_PRIVATE).edit()
                             .putString("temp_token", tempToken)
+                            .putLong("otp_timestamp", System.currentTimeMillis())
                             .putBoolean("is_google_login", false)
                             .apply();
                     
                     Intent intent = new Intent(WelcomeActivity.this, VerifyOtpActivity.class);
                     intent.putExtra("temp_token", tempToken);
+                    intent.putExtra("email", email);
+                    intent.putExtra("password", password);
+                    intent.putExtra("action", "login");
                     startActivity(intent);
                     finish();
                 } else {
@@ -148,11 +152,16 @@ public class WelcomeActivity extends AppCompatActivity {
                     String tempToken = response.body().getAccessToken();
                     getSharedPreferences("AppPrefs", MODE_PRIVATE).edit()
                             .putString("temp_token", tempToken)
+                            .putLong("otp_timestamp", System.currentTimeMillis())
                             .putBoolean("is_google_login", false)
                             .apply();
                     
                     Intent intent = new Intent(WelcomeActivity.this, VerifyOtpActivity.class);
                     intent.putExtra("temp_token", tempToken);
+                    intent.putExtra("name", name);
+                    intent.putExtra("email", email);
+                    intent.putExtra("password", password);
+                    intent.putExtra("action", "register");
                     startActivity(intent);
                     finish();
                 } else {
@@ -227,6 +236,7 @@ public class WelcomeActivity extends AppCompatActivity {
         getSharedPreferences("AppPrefs", MODE_PRIVATE).edit()
                 .remove("access_token")
                 .remove("temp_token")
+                .remove("otp_timestamp")
                 .remove("is_google_login")
                 .apply();
         

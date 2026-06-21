@@ -285,7 +285,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/bg_dashboard_panel"
                     android:gravity="top"
-                    android:hint="Paste a link or type a claim to verify..."
+                    android:hint="Type a claim to verify..."
                     android:padding="16dp"
                     android:textColor="?attr/textPrimary"
                     android:textColorHint="?attr/textSecondary"

@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -158,7 +160,7 @@ public class DashboardActivity extends AppCompatActivity {
                     drawerLayout.removeDrawerListener(this);
                     
                     if (id == R.id.nav_logout) {
-                        logout();
+                        showLogoutConfirmationDialog();
                     } else if (id == R.id.nav_history) {
                         startActivity(new Intent(DashboardActivity.this, HistoryActivity.class));
                     } else if (id == R.id.nav_settings) {
@@ -175,6 +177,15 @@ public class DashboardActivity extends AppCompatActivity {
 
         registerAnalysisReceiver();
         fetchUserInfo();
+    }
+
+    private void showLogoutConfirmationDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Yes", (dialog, which) -> logout())
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void showImagePreview(Uri uri) {
@@ -201,6 +212,7 @@ public class DashboardActivity extends AppCompatActivity {
         LinearLayout llPasswordSection = dialog.findViewById(R.id.ll_password_section);
         EditText etNewUsername = dialog.findViewById(R.id.et_new_username);
         EditText etNewPassword = dialog.findViewById(R.id.et_new_password);
+        ImageView ivPasswordToggle = dialog.findViewById(R.id.iv_password_toggle);
         EditText etOtpInput = dialog.findViewById(R.id.et_otp_input);
         MaterialButton btnSendOtp = dialog.findViewById(R.id.btn_send_otp);
         MaterialButton btnSave = dialog.findViewById(R.id.btn_save_changes);
@@ -240,6 +252,17 @@ public class DashboardActivity extends AppCompatActivity {
             llUsernameSection.setVisibility(View.GONE);
         });
 
+        if (ivPasswordToggle != null) {
+            ivPasswordToggle.setOnClickListener(v -> {
+                if (etNewPassword.getTransformationMethod() instanceof PasswordTransformationMethod) {
+                    etNewPassword.setTransformationMethod(null);
+                } else {
+                    etNewPassword.setTransformationMethod(new PasswordTransformationMethod());
+                }
+                etNewPassword.setSelection(etNewPassword.getText().length());
+            });
+        }
+
         btnSendOtp.setOnClickListener(v -> {
             String password = etNewPassword.getText().toString().trim();
             if (password.isEmpty()) {
@@ -259,6 +282,13 @@ public class DashboardActivity extends AppCompatActivity {
                     Toast.makeText(this, "Please enter password, send OTP and enter it", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                long otpTimestamp = prefs.getLong("otp_timestamp", 0);
+                if (System.currentTimeMillis() - otpTimestamp > 120000) { // 2 minutes
+                    Toast.makeText(this, "Session Expired. Send the OTP again.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 verifyPasswordUpdate(tempToken, otp, dialog);
             } else {
                 String username = etNewUsername.getText().toString().trim();
@@ -288,7 +318,10 @@ public class DashboardActivity extends AppCompatActivity {
                 btn.setEnabled(true);
                 if (response.isSuccessful() && response.body() != null) {
                     String tempToken = response.body().getAccessToken();
-                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().putString("temp_password_token", tempToken).apply();
+                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit()
+                            .putString("temp_password_token", tempToken)
+                            .putLong("otp_timestamp", System.currentTimeMillis())
+                            .apply();
                     Toast.makeText(DashboardActivity.this, "OTP sent to your email", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(DashboardActivity.this, "Requesting too much OTP's. Try again after 1 min.", Toast.LENGTH_SHORT).show();
@@ -314,10 +347,13 @@ public class DashboardActivity extends AppCompatActivity {
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(DashboardActivity.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
-                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit().remove("temp_password_token").apply();
+                    getSharedPreferences("AppPrefs", MODE_PRIVATE).edit()
+                            .remove("temp_password_token")
+                            .remove("otp_timestamp")
+                            .apply();
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(DashboardActivity.this, "OTP verification failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DashboardActivity.this, "Invalid OTP !", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -350,7 +386,7 @@ public class DashboardActivity extends AppCompatActivity {
                     fetchUserInfo();
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(DashboardActivity.this, "Update failed: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DashboardActivity.this, "This username has been taken. Please try a new username", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -377,7 +413,7 @@ public class DashboardActivity extends AppCompatActivity {
             else Toast.makeText(this, "Please enter text to verify", Toast.LENGTH_SHORT).show();
         } else {
             if (selectedImageUri != null) uploadImage(selectedImageUri);
-            else Toast.makeText(this, "Please select a file first", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(this, "Please select a image first", Toast.LENGTH_SHORT).show();
         }
     }
 
